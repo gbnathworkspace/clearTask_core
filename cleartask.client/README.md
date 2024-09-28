@@ -48,3 +48,20 @@ export default tseslint.config({
   },
 })
 ```
+
+
+cd your project
+npm init
+npm install
+
+
+//in cd cleartask.server
+dotnet add package Microsoft.AspNetCore.Identity.EntityFrameworkCore
+dotnet add package Microsoft.AspNetCore.Authentication.JwtBearer
+dotnet add package Microsoft.EntityFrameworkCore.SqlServer
+
+
+
+//cd cleartask.client
+npm install react-router-dom
+
