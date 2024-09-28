@@ -26,27 +26,67 @@ public class AuthController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterModel model)
     {
-        try 
+        try
         {
+            // Check if model validation is valid
             if (!ModelState.IsValid)
             {
-                return BadRequest(new { message = "Invalid data" });
+                // Collect all validation errors
+                var errors = ModelState.Values.SelectMany(v => v.Errors)
+                                              .Select(e => e.ErrorMessage)
+                                              .ToList();
+                return BadRequest(new { message = "Invalid data", errors });
             }
-            ApplicationUser user = new ApplicationUser { UserName = model.FirstName + model.LastName, FirstName = model.FirstName, LastName = model.LastName, emailid = model.Email };
+
+            if (model.Password != model.ConfirmPassword)
+            {
+                return BadRequest(new { message = "Passwords do not match" });
+            }
+
+            // Generate a username (consider making it unique or using email as username)
+            var userName = $"{model.FirstName}.{model.LastName}".ToLower();
+
+            // Check if the username is already taken
+            var existingUser = await _userManager.FindByNameAsync(userName);
+            if (existingUser != null)
+            {
+                return BadRequest(new { message = "Username is already taken" });
+            }
+
+            // Check if the email is already taken
+            var existingEmailUser = await _userManager.FindByEmailAsync(model.Email);
+            if (existingEmailUser != null)
+            {
+                return BadRequest(new { message = "Email is already taken" });
+            }
+
+            // Create the user object
+            ApplicationUser user = new ApplicationUser
+            {
+                UserName = userName,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                Email = model.Email  // Assuming the property name is 'Email' in your identity model
+            };
+
+            // Create user with password
             IdentityResult result = await _userManager.CreateAsync(user, model.Password);
 
+            // If creation failed, return error messages
             if (!result.Succeeded)
             {
-                return BadRequest(new { message = result.Errors.FirstOrDefault()?.Description });
+                var identityErrors = result.Errors.Select(e => e.Description).ToList();
+                return BadRequest(new { message = "Registration failed", errors = identityErrors });
             }
 
+            // Return success message
             return Ok(new { message = "Registration successful" });
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
-            return Ok(new { message = "Registration Unsuccessful" });
+            // Log exception (not shown) and return 500 error with detailed message
+            return StatusCode(500, new { message = "Registration unsuccessful", error = ex.Message });
         }
-
     }
 
     [HttpPost("login")]
@@ -56,7 +96,7 @@ public class AuthController : ControllerBase
 
         if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password))
         {
-            return Unauthorized();
+            return Unauthorized(new { message = "Invalid email or password" });
         }
 
         var token = GenerateJwtToken(user);
@@ -73,13 +113,13 @@ public class AuthController : ControllerBase
     private string GenerateJwtToken(ApplicationUser user)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]);
+        var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Key"] ?? throw new InvalidOperationException("JWT Key is not configured."));
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(new Claim[]
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
-                new Claim(ClaimTypes.Name, user.UserName)
+                new Claim(ClaimTypes.Name, user.UserName ?? throw new InvalidOperationException("UserName is null"))
             }),
             Expires = DateTime.UtcNow.AddDays(7),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
