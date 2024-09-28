@@ -26,15 +26,27 @@ public class AuthController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterModel model)
     {
-        var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-        var result = await _userManager.CreateAsync(user, model.Password);
-
-        if (!result.Succeeded)
+        try 
         {
-            return BadRequest(result.Errors);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new { message = "Invalid data" });
+            }
+            ApplicationUser user = new ApplicationUser { UserName = model.FirstName + model.LastName, FirstName = model.FirstName, LastName = model.LastName, emailid = model.Email };
+            IdentityResult result = await _userManager.CreateAsync(user, model.Password);
+
+            if (!result.Succeeded)
+            {
+                return BadRequest(new { message = result.Errors.FirstOrDefault()?.Description });
+            }
+
+            return Ok(new { message = "Registration successful" });
+        }
+        catch(Exception ex)
+        {
+            return Ok(new { message = "Registration Unsuccessful" });
         }
 
-        return Ok(new { message = "Registration successful" });
     }
 
     [HttpPost("login")]

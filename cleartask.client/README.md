@@ -65,3 +65,12 @@ dotnet add package Microsoft.EntityFrameworkCore.SqlServer
 //cd cleartask.client
 npm install react-router-dom
 
+dotnet add package Npgsql.EntityFrameworkCore.PostgreSQL
+
+
+//for migration
+dotnet ef migrations add InitialIdentitySetup
+dotnet ef database update
+
+
+

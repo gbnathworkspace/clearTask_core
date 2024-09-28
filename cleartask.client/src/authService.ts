@@ -1,14 +1,10 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000/api/auth/'; // Your backend API base URL
+const API_URL = 'http://localhost:5076/api/auth/'; // Your backend API base URL
 
 // Register new user
-export const register = (email: string, password: string, confirmPassword: string) => {
-    return axios.post(API_URL + 'register', {
-        email,
-        password,
-        confirmPassword
-    });
+export const register = (userData: { firstName: string, lastName: string, email: string, password: string}) => {
+    return axios.post(API_URL + 'register', userData);
 };
 
 // Login user and get JWT token

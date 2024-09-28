@@ -8,8 +8,8 @@
 
         public string ConfirmPassword { get; set; }
 
-        // Optional: Additional fields if needed
         public string FirstName { get; set; }
+
         public string LastName { get; set; }
     }
 }
