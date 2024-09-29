@@ -51,10 +51,16 @@ builder.Services.AddControllers();
 
 var app = builder.Build();
 
+// Configure middleware
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}
+
+app.UseRouting();
+
 app.UseCors("AllowAllOrigins"); // Enable the CORS policy
 
-// Configure middleware
-app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
