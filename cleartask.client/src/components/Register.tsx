@@ -1,6 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react';
 import { register } from '../authService';
+import styles from './styles';
+
+// Rest of the code...
+
 
 // Define the structure of the error response from the server
 interface ErrorResponse {
@@ -56,45 +60,59 @@ const Register: React.FC = () => {
         return typeof error === 'object' && error !== null && 'response' in error && 'data' in (error as any).response;
     };
 
+
+
+
     return (
-        <div>
-            <form onSubmit={handleRegister}>
-                <input
+        <div style={styles.container}>
+            <div style={styles.relativediv}>
+                <form onSubmit={handleRegister}>
+                    <input
+                    style={styles.formBox}
                     type="text"
                     placeholder="First Name"
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
                     required
                 />
-                <input
+                    <input
+                    style={styles.formBox}
                     type="text"
                     placeholder="Last Name"
                     value={lastName}
                     onChange={(e) => setLastName(e.target.value)}
                     required
                 />
-                <input
+
+                    <input
+                    style={styles.formBox}
                     type="email"
                     placeholder="Email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
                 />
-                <input
+
+                    <input
+                    style={styles.formBox}
                     type="password"
                     placeholder="Password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
                 />
-                <input
+
+                    <input
+                    style={styles.formBox}
                     type="password"
                     placeholder="Confirm Password"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     required
                 />
-                <button type="submit">Register</button>
+
+
+                    <button style={styles.RegisterButton} type="submit">Register</button>
             </form>
             {responseMessage && <p>{responseMessage}</p>}
             {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
@@ -104,9 +122,11 @@ const Register: React.FC = () => {
                         <li key={index}>{error}</li>
                     ))}
                 </ul>
-            )}
+                )}
+            </div>
         </div>
     );
+
 };
 
 export default Register;

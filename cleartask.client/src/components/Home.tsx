@@ -1,28 +1,29 @@
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
+import styles from './styles'
 
 
 const Home: React.FC = () => {
 
     const navigate = useNavigate();
 
-    const handleClick = () => {
-        alert('Button Clicked');
-    }
-
     const handleRegisterClick = () => {
         navigate('/register');
     }
+    const handleClick_login = () => {
+        navigate('/login');
+    }
 
     return (
-        <div>
-            <h1>Welcome to the Home Page</h1>
-            <p>This is a simple homepage for your application.</p>
+        <div style = {styles.container}>
+        <div style={styles.relativediv}>
+            <h1>Welcome to ClearTask</h1>
 
-            <button onClick={handleClick}>Click Me</button>
+                <button style={styles.RegisterButton} onClick={handleRegisterClick}>Register</button>
 
+                <button style={styles.RegisterButton} onClick={handleClick_login}>Login</button>
 
-            <button onClick={handleRegisterClick}></button>
+            </div>
         </div>
     );
 };

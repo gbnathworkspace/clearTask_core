@@ -10,6 +10,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\assets\index-BPvgi06w.css" />
+    <Content Remove="wwwroot\assets\index-Co6T7Tcw.js" />
+    <Content Remove="wwwroot\index.html" />
+    <Content Remove="wwwroot\vite.svg" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="DocuSign.eSign.dll" Version="7.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.8" />
@@ -30,6 +37,13 @@
     <ProjectReference Include="..\cleartask.client\cleartask.client.esproj">
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\assets\index-BPvgi06w.css" />
+    <None Include="wwwroot\assets\index-Co6T7Tcw.js" />
+    <None Include="wwwroot\index.html" />
+    <None Include="wwwroot\vite.svg" />
   </ItemGroup>
 
 </Project>
