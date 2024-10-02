@@ -1,11 +1,39 @@
-﻿#root {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 2rem;
-    text-align: center;
+﻿.container {
+    position: relative;
+    height: 100vh;
+    width: 100vw;
+    background-color: lightgray;
 }
 
-th, td {
-    padding-left: 1rem;
-    padding-right: 1rem;
+.navbar {
+    display: flex;
+    flex-direction: row;
+    position: absolute;
+    top: 0;
+    background-color: #424f0a;
+    height: 10vh;
+    width: 100vw;
+    overflow: hidden;
+    align-items: center;
+    gap: 425px;
+}
+
+.navbar-right {
+    padding: 20px;
+    display: flex;
+    flex-direction: row;
+    gap: 50px;
+}
+
+.navbar-profile {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: darkgrey;
+    overflow: hidden;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
 }

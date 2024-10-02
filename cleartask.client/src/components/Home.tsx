@@ -1,28 +1,30 @@
 import * as React from 'react';
+import '../App.css';
 import { useNavigate } from 'react-router-dom';
-import styles from './styles'
+import profilepic from '../assets/defaultuser.jpg'
 
-
+// Event handler to navigate to the profile page
 const Home: React.FC = () => {
-
     const navigate = useNavigate();
 
-    const handleRegisterClick = () => {
-        navigate('/register');
-    }
-    const handleClick_login = () => {
-        navigate('/login');
-    }
+    // Function to handle profile navigation
+    const goToProfilePage = () => {
+        navigate('/userprofile');
+    };
+
 
     return (
-        <div style = {styles.container}>
-        <div style={styles.relativediv}>
-            <h1>Welcome to ClearTask</h1>
-
-                <button style={styles.RegisterButton} onClick={handleRegisterClick}>Register</button>
-
-                <button style={styles.RegisterButton} onClick={handleClick_login}>Login</button>
-
+        <div className="navbar">
+            <div className="navbar-right">
+                <div>Home</div>
+                <div>Home</div>
+                <div>Home</div>
+                <div>Home</div>
+            </div>
+            <div className="navbar-profile" onClick={goToProfilePage}>
+                <img src={profilepic} alt="profilepic" style={{
+                    maxHeight: '100%', maxWidth: '150%'
+                }} />
             </div>
         </div>
     );
