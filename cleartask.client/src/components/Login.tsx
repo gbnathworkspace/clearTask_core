@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { login } from '../authService';
 import styles from './styles';
+import { useNavigate } from 'react-router-dom';
 
 
 interface LoginResponse {
@@ -24,6 +25,7 @@ const Login: React.FC = () => {
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
     const [errorDetails, setErrorDetails] = useState<string[] | null>(null);
+    const Navigate = useNavigate();
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -37,6 +39,7 @@ const Login: React.FC = () => {
             localStorage.setItem('token', responseData.token);
             console.log('Login successful:', responseData.token);
             setSuccessMessage('Login successful:')
+            Navigate('/home')
         } catch (error) {
             if (isErrorResponse(error)) {
                 const errorData: ErrorResponse = error.response.data;

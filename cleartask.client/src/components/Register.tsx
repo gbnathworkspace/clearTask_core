@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react';
 import { register } from '../authService';
+import { useNavigate } from 'react-router-dom';
 import styles from './styles';
 
 // Rest of the code...
@@ -21,6 +22,7 @@ const Register: React.FC = () => {
     const [responseMessage, setResponseMessage] = useState<string | null>(null);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [errorDetails, setErrorDetails] = useState<string[] | null>(null);
+    const navigate = useNavigate();
 
     const handleRegister = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -38,6 +40,7 @@ const Register: React.FC = () => {
             const response = await register({ firstName, lastName, email, password, confirmPassword });
             setResponseMessage('User registered successfully!');
             console.log('User registered:', response.data);
+            navigate('/home');
         } catch (error) {
             if (isErrorResponse(error)) {
                 const errorData: ErrorResponse = error.response.data;

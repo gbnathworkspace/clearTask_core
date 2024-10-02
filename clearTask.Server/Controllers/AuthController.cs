@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using clearTask.Server.Models;
+using clearTask.Server;
 
 [ApiController]
 [Route("api/auth")]
@@ -26,9 +27,10 @@ public class AuthController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterModel model)
     {
+        Logger.InfoLog(model);
         try
         {
-            // Check if model validation is valid
+            #region Validation
             if (!ModelState.IsValid)
             {
                 // Collect all validation errors
@@ -38,41 +40,31 @@ public class AuthController : ControllerBase
                 return BadRequest(new { message = "Invalid data", errors });
             }
 
-            if (model.Password != model.ConfirmPassword)
-            {
-                return BadRequest(new { message = "Passwords do not match" });
-            }
-
-            // Generate a username (consider making it unique or using email as username)
             var userName = $"{model.FirstName}.{model.LastName}".ToLower();
-
-            // Check if the username is already taken
             var existingUser = await _userManager.FindByNameAsync(userName);
+
             if (existingUser != null)
             {
                 return BadRequest(new { message = "Username is already taken" });
             }
 
-            // Check if the email is already taken
             var existingEmailUser = await _userManager.FindByEmailAsync(model.Email);
             if (existingEmailUser != null)
             {
                 return BadRequest(new { message = "Email is already taken" });
             }
+            #endregion
 
-            // Create the user object
             ApplicationUser user = new ApplicationUser
             {
                 UserName = userName,
                 FirstName = model.FirstName,
                 LastName = model.LastName,
-                Email = model.Email  // Assuming the property name is 'Email' in your identity model
+                Email = model.Email
             };
 
-            // Create user with password
             IdentityResult result = await _userManager.CreateAsync(user, model.Password);
 
-            // If creation failed, return error messages
             if (!result.Succeeded)
             {
                 var identityErrors = result.Errors.Select(e => e.Description).ToList();
