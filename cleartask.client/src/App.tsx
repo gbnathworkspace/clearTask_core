@@ -1,9 +1,10 @@
 import * as React from 'react';  // This is another valid import style
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Home from './components/Home'
-import Register from './components/Register';
-import Login from './components/Login';
-import LandingPage from './components/LandingPage';
+import Home from './pages/Home'
+import Register from './pages/Register';
+import Login from './pages/Login';
+import LandingPage from './pages/LandingPage';
+import TasksPage from './pages/Tasks';
 
 const App: React.FC = () => {
     return (
@@ -13,6 +14,7 @@ const App: React.FC = () => {
                 <Route path="/register" element={<Register />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/" element={<LandingPage />}></Route>
+                <Route path='/tasks' element={<TasksPage/>}></Route>
             </Routes>
         </Router>
     );

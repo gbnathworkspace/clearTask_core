@@ -6,6 +6,7 @@ namespace clearTask.Server
     public class Logger
     {
         private static string infoLog_filename = "dbInfoLog";
+        private static string errorLog_filename = "dbErrorLog";
         private static string downloadsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads");
 
         internal static void InfoLog<T>(T model, [CallerMemberName] string functionName = "", params string[] functionParams)
@@ -29,12 +30,12 @@ namespace clearTask.Server
             }
             catch (Exception) { }
         }
-        internal static void ErrorLog(string logMessage, string fileName, string filePath = "")
+        internal static void ErrorLog(string logMessage, string filePath = "")
         {
             try
             {
                 // Specify the log file name
-                string logFilePath = Path.Combine(filePath ?? downloadsPath, $"{fileName}_log.txt");
+                string logFilePath = Path.Combine(filePath ?? downloadsPath, $"{errorLog_filename}_log.txt");
 
                 // Append the log message to the file (create it if it doesn't exist)
                 using (StreamWriter writer = new StreamWriter(logFilePath, true))

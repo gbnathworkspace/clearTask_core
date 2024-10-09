@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from 'react';
 import { login } from '../authService';
-import styles from './styles';
+import styles from '../components/styles';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -27,6 +27,10 @@ const Login: React.FC = () => {
     const [errorDetails, setErrorDetails] = useState<string[] | null>(null);
     const Navigate = useNavigate();
 
+
+    const NavigateToRegister = () => {
+        Navigate('/register')
+    };
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         setResponseMessage(null);
@@ -93,6 +97,12 @@ const Login: React.FC = () => {
                         ))}
                     </ul>
                 )}
+                <div className="register-form-text">
+                    Dont have an Account?
+                    <a onClick={NavigateToRegister} className="login-link">
+                        Register here
+                    </a>
+                </div>
             </div>
         </div>
     );

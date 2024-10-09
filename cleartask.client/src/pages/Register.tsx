@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { register } from '../authService';
 import { useNavigate } from 'react-router-dom';
-import styles from './styles';
+import styles from '../components/styles';
 
 // Rest of the code...
 
@@ -23,6 +23,10 @@ const Register: React.FC = () => {
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [errorDetails, setErrorDetails] = useState<string[] | null>(null);
     const navigate = useNavigate();
+
+    const NavigateToLogin = () => {
+        navigate('/Login')
+    }
 
     const handleRegister = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -126,6 +130,12 @@ const Register: React.FC = () => {
                     ))}
                 </ul>
                 )}
+                <div className= "register-form-text">
+                    Already have an Account? 
+                    <a onClick={NavigateToLogin} className="login-link">
+                     Login here
+                    </a>
+                </div>
             </div>
         </div>
     );

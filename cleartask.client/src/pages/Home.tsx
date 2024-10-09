@@ -12,12 +12,16 @@ const Home: React.FC = () => {
         navigate('/userprofile');
     };
 
+    const NavigateToTasks = () => {
+        navigate('/tasks');
+    }
+
 
     return (
         <div className="navbar">
             <div className="navbar-right">
                 <div>Home</div>
-                <div>Home</div>
+                <div onClick={NavigateToTasks} className= "clickable-text">Tasks</div>
                 <div>Home</div>
                 <div>Home</div>
             </div>

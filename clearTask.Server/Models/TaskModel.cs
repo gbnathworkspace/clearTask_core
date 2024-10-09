@@ -1,11 +1,14 @@
-﻿namespace clearTask.Server.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace clearTask.Server.Models
 {
     public class TaskModel
     {
-        public int Id { get; set; }
-        public string Title { get; set; }
-        public string Description { get; set; }
+        public required int Id { get; set; }
+        public  string Title { get; set; }
+        public string Description { get; set; } = string.Empty;
         public bool IsCompleted { get; set; }
-        public string UserId { get; set; } // Foreign key to the ApplicationUser
+        public required string UserId { get; set; }
+        
     }
 }

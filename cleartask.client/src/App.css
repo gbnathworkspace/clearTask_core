@@ -15,7 +15,7 @@
     width: 100vw;
     overflow: hidden;
     align-items: center;
-    gap: 425px;
+    gap: 72vw;
 }
 
 .navbar-right {
@@ -35,5 +35,75 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
 
+.register-form-text {
+    font-size: 14px;
+    margin-top: 10px;
+    color: gray;
+    gap: 2px;
+    align-items : center;
+    justify-content : center;
+    display: flex;
+}
+.login-link {
+    margin-left: 5px;
+    color: darkgreen;
+}
+
+.login-link:hover {
+    color: limegreen;
+    cursor: pointer;
+}
+
+.clickable-text {
+    cursor:pointer;
+}
+.taskbar-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    flex-direction: row;
+}
+
+.taskbar {
+    border: 1px solid black;
+    background-color: #f1ffb4;
+    width: 85vw;
+    height: 85vh;
+    border-radius: 10px;
+    margin-top: 10vh;
+}
+
+.addtask {
+    background-color: #557931;
+    border-radius: 40px;
+    width: 150px;
+    height: 100px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    display: flex;
+    font-size: 16px;
+    cursor: pointer;
+    gap: 10px;
+}
+
+.page {
+    height: 100vh;
+    width: 100vw;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+.heading{
+    color: black;
+    font-family: 'Sans Serif Collection';
+    font-size: 30px;
+    margin-left: 38vw;
 }
