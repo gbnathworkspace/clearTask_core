@@ -100,7 +100,7 @@ namespace clearTask.Server.Controllers
 
             #region Businness Logic
             var token = GenerateJwtToken(user);
-            return Ok(new { token });
+            return Ok(new { token = token, userid = user.Id });
             #endregion
         }
 

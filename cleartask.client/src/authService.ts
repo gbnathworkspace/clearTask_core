@@ -34,7 +34,7 @@ export const login = (email: string, password: string) => {
  */
 export const logout = () => {
     return axios.post(API_URL + 'logout');
-};
+}; 
 
 /**
  * Change the password of the currently authenticated user.

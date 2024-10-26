@@ -245,9 +245,6 @@ namespace clearTask.Server.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("AppUserModelId")
-                        .HasColumnType("text");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("text");
@@ -265,7 +262,7 @@ namespace clearTask.Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AppUserModelId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Tasks");
                 });
@@ -323,9 +320,13 @@ namespace clearTask.Server.Migrations
 
             modelBuilder.Entity("clearTask.Server.Models.TaskModel", b =>
                 {
-                    b.HasOne("clearTask.Server.Models.AppUserModel", null)
+                    b.HasOne("clearTask.Server.Models.AppUserModel", "User")
                         .WithMany("Tasks")
-                        .HasForeignKey("AppUserModelId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("clearTask.Server.Models.AppUserModel", b =>

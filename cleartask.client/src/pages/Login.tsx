@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
 interface LoginResponse {
     token: string;
+    userid: string;
 }
 
 interface ErrorResponse {
@@ -40,7 +41,12 @@ const Login: React.FC = () => {
         try {
             const response = await login(email, password);
             const responseData = response.data as LoginResponse;
-            localStorage.setItem('token', responseData.token);
+            sessionStorage.setItem('token', responseData.token);
+            sessionStorage.setItem('userid', responseData.userid);
+
+            console.log('Token stored in sessionStorage:', sessionStorage.getItem('token'));
+            console.log('UserId stored in sessionStorage:', sessionStorage.getItem('userid'));
+
             console.log('Login successful:', responseData.token);
             setSuccessMessage('Login successful:')
             Navigate('/home')
