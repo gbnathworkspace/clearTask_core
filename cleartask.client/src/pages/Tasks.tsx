@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import profilepic from '../assets/defaultuser.jpg';
+import Navbar from '../components/NavBar';
 import { getAllTasks, createTask, updateTaskStatus, deleteTask } from '../taskService'; // Updated to include status and delete APIs
 
 interface Task {
@@ -72,19 +72,8 @@ const Tasks: React.FC = () => {
 
     return (
         <div className="page">
-            <div className="navbar">
-                <div className="navbar-right">
-                    <div>Home</div>
-                    <div onClick={() => navigate('/tasks')} className="clickable-text">Tasks</div>
-                    <div>Home</div>
-                    <div>Home</div>
-                </div>
-                <div className="navbar-profile" onClick={goToProfilePage}>
-                    <img src={profilepic} alt="profilepic" style={{
-                        maxHeight: '100%', maxWidth: '150%'
-                    }} />
-                </div>
-            </div>
+            {/* Use the Navbar component here */}
+            <Navbar />
 
             <div className="taskbar-container">
                 <button className="addtask" onClick={handleAddTask}>
