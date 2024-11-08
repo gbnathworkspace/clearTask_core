@@ -28,15 +28,18 @@ The Enhanced To-Do List Application is a full-stack project designed to help use
 9. Responsive Design: Optimized for desktop and mobile devices.
 
 
-🛠️ Technologies Used
-Frontend: React, TypeScript, Vite
-Backend: ASP.NET Core, C#
-Database: PostgreSQL (AWS RDS)
-Authentication: JWT (JSON Web Token)
-Real-Time Updates: WebSocket (SignalR)
-Styling: CSS, Flexbox
-API Testing: Swagger
-Deployment: AWS EC2, AWS RDS
+### 🛠️ Technologies Used
+- Frontend: React, TypeScript, Vite  
+- Backend: ASP.NET Core, C#  
+- Database: PostgreSQL (AWS RDS)  
+- Authentication: JWT (JSON Web Token)  
+- Real-Time Updates: WebSocket (SignalR)  
+- Styling: CSS, Flexbox  
+- API Testing: Swagger  
+- Deployment: AWS EC2, AWS RDS  
+
+
+
 🚀 Setup and Installation
 Prerequisites
 Node.js
