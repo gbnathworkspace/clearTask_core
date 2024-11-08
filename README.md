@@ -1,31 +1,32 @@
-📝 Enhanced To-Do List Application
-📖 Table of Contents
-Introduction
-Features
-Technologies Used
-Setup and Installation
-API Endpoints
-Usage
-Screenshots
-Future Enhancements
-Project Status
-Contributing
-License
-Contact
+###📝 Enhanced To-Do List Application
+
+### 📖 Table of Contents
+- Introduction
+- Features
+- Technologies Used
+- Setup and Installation
+- API Endpoints
+- Usage
+- Screenshots
+- Future Enhancements
+- Project Status
+- Contributing
+- License
+- Contact
 
 📌 Introduction
 The Enhanced To-Do List Application is a full-stack project designed to help users manage their tasks efficiently. It offers a user-friendly interface, real-time updates, calendar integration, and various collaboration features. This project showcases modern web development practices and demonstrates a variety of technologies, including React, ASP.NET Core, and PostgreSQL.
 
-🌟 Features
-1. User Authentication: Secure login with JWT-based authentication.
-2. Task Management: Add, update, and delete tasks with ease.
-3. Due Date and Calendar View: Assign due dates to tasks and view them on a calendar for better organization.
-4. Real-Time Updates: Share your to-do list with others and receive real-time updates using WebSockets.
-5. Task Sharing: Share your task list with specific users for collaboration.
-6. Task Assignment: Assign tasks to specific users in your shared list.
-7. Push Notifications: Receive notifications before the due date of tasks.
-8. Dark Mode Support: Toggle dark mode for a better user experience.
-9. Responsive Design: Optimized for desktop and mobile devices.
+### 🌟 Features
+- User Authentication: Secure login with JWT-based authentication.
+- Task Management: Add, update, and delete tasks with ease.
+- Due Date and Calendar View: Assign due dates to tasks and view them on a calendar for better organization.
+- Real-Time Updates: Share your to-do list with others and receive real-time updates using WebSockets.
+- Task Sharing: Share your task list with specific users for collaboration.
+- Task Assignment: Assign tasks to specific users in your shared list.
+- Push Notifications: Receive notifications before the due date of tasks.
+- Dark Mode Support: Toggle dark mode for a better user experience.
+- Responsive Design: Optimized for desktop and mobile devices.
 
 
 ### 🛠️ Technologies Used
@@ -40,7 +41,7 @@ The Enhanced To-Do List Application is a full-stack project designed to help use
 
 
 
-🚀 Setup and Installation
+### 🚀 Setup and Installation
 Prerequisites
 Node.js
 .NET SDK
@@ -96,20 +97,23 @@ PATCH /api/task/updatetaskstatus: Update task completion status
 POST /api/task/deletetask: Delete a task
 Real-Time Updates
 ws://localhost:5076/realtime: WebSocket endpoint for task updates
-📸 Screenshots
+
+### 📸 Screenshots
 Feature	Screenshot
 Calendar View	
 Task Management	
 Dark Mode	
-📅 Future Enhancements
+
+### 📅 Future Enhancements
 Task Categories: Organize tasks by categories (e.g., Work, Personal).
 Subtasks: Add support for subtasks under each main task.
 Offline Support: Enable offline access using Service Workers.
 Enhanced Notifications: Integrate email notifications for task reminders.
-🚧 Project Status
+
+### 🚧 Project Status
 The project is currently in the development phase. All core features are implemented, and additional enhancements are planned. Contributions are welcome!
 
-🤝 Contributing
+### 🤝 Contributing
 If you want to contribute to this project, please follow these steps:
 
 Fork the repository.
@@ -117,10 +121,11 @@ Create a new feature branch (git checkout -b feature-name).
 Commit your changes (git commit -m 'Add new feature').
 Push to the branch (git push origin feature-name).
 Create a Pull Request.
-📄 License
+
+### 📄 License
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-📬 Contact
+### 📬 Contact
 GitHub: yourusername
 Email: your.email@example.com
 LinkedIn: Your LinkedIn Profile
