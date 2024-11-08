@@ -17,7 +17,7 @@
 ## 📌 Introduction
 The Enhanced To-Do List Application is a full-stack project designed to help users manage their tasks efficiently. It offers a user-friendly interface, real-time updates, calendar integration, and various collaboration features. This project showcases modern web development practices and demonstrates a variety of technologies, including React, ASP.NET Core, and PostgreSQL.
 
-### 🌟 Features
+## 🌟 Features
 - User Authentication: Secure login with JWT-based authentication.
 - Task Management: Add, update, and delete tasks with ease.
 - Due Date and Calendar View: Assign due dates to tasks and view them on a calendar for better organization.
@@ -29,7 +29,7 @@ The Enhanced To-Do List Application is a full-stack project designed to help use
 - Responsive Design: Optimized for desktop and mobile devices.
 
 
-### 🛠️ Technologies Used
+## 🛠️ Technologies Used
 - Frontend: React, TypeScript, Vite  
 - Backend: ASP.NET Core, C#  
 - Database: PostgreSQL (AWS RDS)  
@@ -39,9 +39,7 @@ The Enhanced To-Do List Application is a full-stack project designed to help use
 - API Testing: Swagger  
 - Deployment: AWS EC2, AWS RDS  
 
-
-
-### 🚀 Setup and Installation
+## 🚀 Setup and Installation
 Prerequisites
 Node.js
 .NET SDK
