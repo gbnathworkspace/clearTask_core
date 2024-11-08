@@ -18,15 +18,15 @@
 The Enhanced To-Do List Application is a full-stack project designed to help users manage their tasks efficiently. It offers a user-friendly interface, real-time updates, calendar integration, and various collaboration features. This project showcases modern web development practices and demonstrates a variety of technologies, including React, ASP.NET Core, and PostgreSQL.
 
 ## 🌟 Features
-- User Authentication: Secure login with JWT-based authentication.
-- Task Management: Add, update, and delete tasks with ease.
-- Due Date and Calendar View: Assign due dates to tasks and view them on a calendar for better organization.
-- Real-Time Updates: Share your to-do list with others and receive real-time updates using WebSockets.
-- Task Sharing: Share your task list with specific users for collaboration.
-- Task Assignment: Assign tasks to specific users in your shared list.
-- Push Notifications: Receive notifications before the due date of tasks.
-- Dark Mode Support: Toggle dark mode for a better user experience.
-- Responsive Design: Optimized for desktop and mobile devices.
+- **User Authentication**: Secure login with JWT-based authentication.
+- **Task Management**: Add, update, and delete tasks with ease.
+- **Due Date and Calendar View**: Assign due dates to tasks and view them on a calendar for better organization.
+- **Real-Time Updates**: Share your to-do list with others and receive real-time updates using WebSockets.
+- **Task Sharing**: Share your task list with specific users for collaboration.
+- **Task Assignment**: Assign tasks to specific users in your shared list.
+- **Push Notifications**: Receive notifications before the due date of tasks.
+- **Dark Mode Support**: Toggle dark mode for a better user experience.
+- **Responsive Design**: Optimized for desktop and mobile devices.
 
 
 ## 🛠️ Technologies Used
