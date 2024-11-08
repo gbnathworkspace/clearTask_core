@@ -26,7 +26,7 @@ The Enhanced To-Do List Application is a full-stack project designed to help use
 - **Task Assignment**: Assign tasks to specific users in your shared list.
 - **Push Notifications**: Receive notifications before the due date of tasks.
 - **Dark Mode Support**: Toggle dark mode for a better user experience.
-- **Responsive Design**: Optimized for desktop and mobile devices.
+- **Responsive Design**: Optimized for desktop.
 
 
 ## 🛠️ Technologies Used
