@@ -1,4 +1,4 @@
-###📝 Enhanced To-Do List Application
+# 📝 Enhanced To-Do List Application
 
 ### 📖 Table of Contents
 - Introduction
