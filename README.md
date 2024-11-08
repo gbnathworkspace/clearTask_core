@@ -14,7 +14,7 @@
 - License
 - Contact
 
-📌 Introduction
+## 📌 Introduction
 The Enhanced To-Do List Application is a full-stack project designed to help users manage their tasks efficiently. It offers a user-friendly interface, real-time updates, calendar integration, and various collaboration features. This project showcases modern web development practices and demonstrates a variety of technologies, including React, ASP.NET Core, and PostgreSQL.
 
 ### 🌟 Features
