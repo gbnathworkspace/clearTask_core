@@ -20,7 +20,8 @@ The Enhanced To-Do List Application is a full-stack project designed to help use
 ## 🌟 Features
 - **User Authentication**: Secure login with JWT-based authentication.
 - **Task Management**: Add, update, and delete tasks with ease.
-- **Due Date and Calendar View**: Assign due dates to tasks and view them on a calendar for better organization.
+- **Due Date and Timeline view**: Assign due dates to tasks and display them on a timeline for better visualization.
+- **Priority Management**: Set task priorities (High, Medium, Low) for better focus and task sorting.
 - **Real-Time Updates**: Share your to-do list with others and receive real-time updates using WebSockets.
 - **Task Sharing**: Share your task list with specific users for collaboration.
 - **Task Assignment**: Assign tasks to specific users in your shared list.
