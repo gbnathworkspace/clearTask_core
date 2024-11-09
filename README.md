@@ -31,7 +31,7 @@ The Enhanced To-Do List Application is a full-stack project designed to help use
 - **Sentiment Analysis for Task Priority**: Uses client-side NLP.js to analyze task descriptions and assign priority automatically based on sentiment.
 
 ### 🧠 Sentiment Analysis Feature
-<br>The application now includes a client-side sentiment analysis feature using NLP.js:
+The application now includes a client-side sentiment analysis feature using NLP.js:
 
 - **Lightweight Client-Side Processing**: No server costs, as sentiment analysis is performed directly in the browser.
 - **Automatic Priority Assignment**: Tasks with negative sentiment are assigned high priority, helping users address urgent tasks quickly.
