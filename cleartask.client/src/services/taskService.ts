@@ -1,10 +1,25 @@
 import axios from 'axios';
 
-interface Task {
+
+export enum Priority {
+    def = 0,
+    low = 1,
+    medium = 2,
+    high = 3
+}
+export interface Task {
     id: number;
     title: string;
     description: string;
     isCompleted: boolean;
+    userId: string;
+    DueDate?: string;
+    priority?: number;
+}
+
+export interface TaskList {
+    id: number;
+    name: string;
     userId: string;
 }
 
@@ -13,14 +28,47 @@ interface GetTasksResponse {
     tasks: Task[];
 }
 
+interface GetListResponse {
+    lists: TaskList[];
+}
+
+const token = sessionStorage.getItem('token'); // Retrieve token each time
+
 
 // Set the base URL for your API
 const API_BASE_URL = 'http://localhost:5076/api/task'; // Adjust the port if necessary
 
+export const getAllLists = async (userId: string): Promise<{ data: GetListResponse }> => {
+    if (!token) {
+        console.error('No token found in session storage');
+        throw new Error('Unauthorized');
+    }
+
+    return await axios.get(`${API_BASE_URL}/getalllists`, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        },
+        params: { userId },
+    });
+}
+
+export const createList = async (list: TaskList) => {
+    if (!token) {
+        console.error('No token found in session storage');
+        throw new Error('Unauthorized');
+    }
+
+    return await axios.post(`${API_BASE_URL}/createlist`, list, {
+        headers:
+        {
+            Authorization: `Bearer ${token}`
+        }
+    });
+};
+
 
 // Function to get all tasks for a specific user
 export const getAllTasks = async (userId: string): Promise<{ data: GetTasksResponse }> => {
-    const token = sessionStorage.getItem('token'); // Retrieve token each time
     if (!token) {
         console.error('No token found in session storage');
         throw new Error('Unauthorized');
@@ -35,12 +83,8 @@ export const getAllTasks = async (userId: string): Promise<{ data: GetTasksRespo
 };
 
 // Function to create a new task
-export const createTask = async (task: {
-    title: string;
-    description: string;
-    userId: string;
-}) => {
-    const token = sessionStorage.getItem('token'); // Retrieve token each time
+export const createTask = async (task: Task) => {
+    const token = sessionStorage.getItem('token');
     if (!token) {
         console.error('No token found in session storage');
         throw new Error('Unauthorized');

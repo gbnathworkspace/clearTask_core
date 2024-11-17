@@ -11,8 +11,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace clearTask.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241018161121_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20241116134425_updatePriority")]
+    partial class updatePriority
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -240,6 +240,26 @@ namespace clearTask.Server.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("clearTask.Server.Models.TaskListModel", b =>
+                {
+                    b.Property<string>("ListId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("ListId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("TaskListModels");
+                });
+
             modelBuilder.Entity("clearTask.Server.Models.TaskModel", b =>
                 {
                     b.Property<int>("Id")
@@ -252,8 +272,18 @@ namespace clearTask.Server.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<DateTime?>("DueDate")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<bool>("IsCompleted")
                         .HasColumnType("boolean");
+
+                    b.Property<string>("ListId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Priority")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -264,6 +294,8 @@ namespace clearTask.Server.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ListId");
 
                     b.HasIndex("UserId");
 
@@ -321,13 +353,32 @@ namespace clearTask.Server.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("clearTask.Server.Models.TaskListModel", b =>
+                {
+                    b.HasOne("clearTask.Server.Models.AppUserModel", "AppUser")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
+                });
+
             modelBuilder.Entity("clearTask.Server.Models.TaskModel", b =>
                 {
+                    b.HasOne("clearTask.Server.Models.TaskListModel", "TaskList")
+                        .WithMany()
+                        .HasForeignKey("ListId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("clearTask.Server.Models.AppUserModel", "User")
                         .WithMany("Tasks")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("TaskList");
 
                     b.Navigation("User");
                 });

@@ -5,6 +5,7 @@ import Register from './pages/Register';
 import Login from './pages/Login';
 import LandingPage from './pages/LandingPage';
 import TasksPage from './pages/Tasks';
+import TimeView from './pages/TimeView';
 
 const App: React.FC = () => {
     return (
@@ -14,7 +15,8 @@ const App: React.FC = () => {
                 <Route path="/register" element={<Register />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/" element={<LandingPage />}></Route>
-                <Route path='/tasks' element={<TasksPage/>}></Route>
+                <Route path='/tasks' element={<TasksPage />}></Route>
+                <Route path="/timeview" element={<TimeView />} />
             </Routes>
         </Router>
     );

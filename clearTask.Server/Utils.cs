@@ -1,7 +1,7 @@
 ﻿namespace clearTask.Server
 {
-    public class Utils
+    public static class Utils
     {
-
+        public static string homeList = "HOME";
     }
 }

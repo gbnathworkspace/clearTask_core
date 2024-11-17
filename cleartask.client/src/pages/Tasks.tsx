@@ -1,29 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Navbar from '../components/NavBar';
-import { getAllTasks, createTask, updateTaskStatus, deleteTask } from '../taskService'; // Updated to include status and delete APIs
-
-interface Task {
-    id: number;
-    title: string;
-    description: string;
-    isCompleted: boolean;
-    userId: string;
-}
+import Navbar from './NavBar';
+import Sidebar from './Sidebar';
+import { Priority, Task, getAllTasks, createTask, updateTaskStatus, deleteTask } from '../services/taskService';
+import { FiCalendar, FiCheck, FiEdit, FiRepeat, FiTrash } from 'react-icons/fi';
+import '../styles/Tasks.css';
 
 const Tasks: React.FC = () => {
-    const navigate = useNavigate();
     const [tasks, setTasks] = useState<Task[]>([]);
     const [newTaskTitle, setNewTaskTitle] = useState('');
     const [newTaskDescription, setNewTaskDescription] = useState('');
-    const userIdses = sessionStorage.getItem('userid') || '';
-    const userId: string = userIdses;
+    const [newTaskPriority, setNewTaskPriority] = useState(0);
+    const [dueDate, setDueDate] = useState<Date | null>(null);
+    const [selectedList, setSelectedList] = useState('Groceries');
+    const userId = sessionStorage.getItem('userid') || '';
 
-
-    // Fetch tasks on component mount
     useEffect(() => {
         fetchTasks();
-    }, []);
+    }, [selectedList]);
 
     const fetchTasks = async () => {
         try {
@@ -35,11 +29,23 @@ const Tasks: React.FC = () => {
     };
 
     const handleAddTask = async () => {
+        const newTask: Task = {
+            id: 0,
+            title: newTaskTitle,
+            userId: userId,
+            description: newTaskDescription,
+            DueDate: dueDate ? dueDate.toISOString() : undefined,
+            priority: newTaskPriority,
+            isCompleted: false
+        }
+
         try {
-            await createTask({ title: newTaskTitle, description: newTaskDescription, userId });
-            fetchTasks(); // Refresh the task list after adding a task
+            await createTask(newTask);
+            fetchTasks();
             setNewTaskTitle('');
             setNewTaskDescription('');
+            setNewTaskPriority(0);
+            setDueDate(null);
         } catch (error) {
             console.error('Error creating task', error);
         }
@@ -48,7 +54,7 @@ const Tasks: React.FC = () => {
     const handleTaskStatusToggle = async (task: Task) => {
         try {
             await updateTaskStatus(task.id, !task.isCompleted);
-            fetchTasks(); // Refresh task list after status update
+            fetchTasks();
         } catch (error) {
             console.error('Error updating task status', error);
         }
@@ -57,84 +63,92 @@ const Tasks: React.FC = () => {
     const handleDeleteTask = async (taskId: number) => {
         try {
             await deleteTask({ id: taskId, userId });
-            fetchTasks(); // Refresh task list after deletion
+            fetchTasks();
         } catch (error) {
             console.error('Error deleting task', error);
         }
     };
 
-    const goToProfilePage = () => {
-        navigate('/userprofile');
+    const getPriorityColor = (priority: string) => {
+        switch (priority) {
+            case 'High':
+                return '#ffcccc';
+            case 'Medium':
+                return '#fff0b3';
+            case 'Low':
+                return '#ccffcc';
+            default:
+                return '#f2f2f2';
+        }
     };
 
-    const pendingTasks = tasks.filter(task => !task.isCompleted);
-    const completedTasks = tasks.filter(task => task.isCompleted);
-
     return (
-        <div className="page">
-            {/* Use the Navbar component here */}
+        <div className="tasks-page">
             <Navbar />
+            <div className="tasks-content">
+                <Sidebar selectedList={selectedList} setSelectedList={setSelectedList} />
+                <div className="main-content">
+                    <div className="task-input-bar">
+                        <input
+                            type="text"
+                            placeholder="Add a new task..."
+                            value={newTaskTitle}
+                            onChange={(e) => setNewTaskTitle(e.target.value)}
+                        />
 
-            <div className="taskbar-container">
-                <button className="addtask" onClick={handleAddTask}>
-                    Add Task <h1>+</h1>
-                </button>
-
-                <div>
-                    <input
-                        type="text"
-                        placeholder="Task Title"
-                        value={newTaskTitle}
-                        onChange={(e) => setNewTaskTitle(e.target.value)}
-                    />
-                    <textarea
-                        placeholder="Task Description"
-                        value={newTaskDescription}
-                        onChange={(e) => setNewTaskDescription(e.target.value)}
-                    />
-                </div>
-
-                <div className="taskbar">
-                    <div className="heading">TASKS</div>
-
-
-                    {/* Pending Tasks Section */}
-                    <div>
-                        <h2>Pending</h2>
-                        {pendingTasks.length > 0 ? (
-                            pendingTasks.map((task) => (
-                                <div key={task.id} className={`task-item ${task.isCompleted ? 'completed' : ''}`}>
-                                    <h3>{task.title}</h3>
-                                    <p>{task.description}</p>
-                                    <p>Status: Incomplete</p>
-                                    <button onClick={() => handleTaskStatusToggle(task)}>Mark as Complete</button>
-                                    <button onClick={() => handleDeleteTask(task.id)}>Delete Task</button>
-                                </div>
-                            ))
-                        ) : (
-                            <p>No pending tasks available</p>
-                        )}
+                        <input
+                            type="date"
+                            placeholder="Due Date"
+                            value={dueDate ? dueDate.toISOString().split('T')[0] : ''}
+                            onChange={(e) => setDueDate(new Date(e.target.value))}
+                            className="due-date-input"
+                        />
+                        <button onClick={handleAddTask}>
+                            <FiCalendar />
+                        </button>
+                        <button onClick={handleAddTask}>+</button>
                     </div>
 
-                    {/* Completed Tasks Section */}
-                    <div>
-                        <h2>Completed</h2>
-                        {completedTasks.length > 0 ? (
-                            completedTasks.map((task) => (
-                                <div key={task.id} className={`task-item ${task.isCompleted ? 'completed' : ''}`}>
-                                    <h3>{task.title}</h3>
-                                    <p>{task.description}</p>
-                                    <p>Status: Completed</p>
-                                    <button onClick={() => handleTaskStatusToggle(task)}>Mark as Incomplete</button>
-                                    <button onClick={() => handleDeleteTask(task.id)}>Delete Task</button>
+                    <div className="task-list">
+                        {tasks.filter(task => !task.isCompleted).map((task) => (
+                            <div
+                                key={task.id}
+                                className="task-card"
+                                style={{ backgroundColor: getPriorityColor(task.priority) }}
+                            >
+                                <div className="task-details">
+                                    <span className="task-title">{task.title}</span>
+                                    <span className="task-description">{task.description}</span>
                                 </div>
-                            ))
-                        ) : (
-                            <p>No completed tasks available</p>
-                        )}
+                                <div className="task-actions">
+                                    <FiEdit onClick={() => console.log('Edit task')} />
+                                    <FiTrash onClick={() => handleDeleteTask(task.id)} />
+                                    <FiCheck onClick={() => handleTaskStatusToggle(task)}/>
+                                </div>
+                            </div>
+                        ))}
                     </div>
 
-
+                    <div className="completed-tasks">
+                        <h3>Completed</h3>
+                        {tasks.filter(task => task.isCompleted).map((task) => (
+                            <div
+                                key={task.id}
+                                className="task-card completed"
+                                style={{ backgroundColor: '#e0e0e0' }}
+                            >
+                                <div className="task-details">
+                                    <span className="task-title">{task.title}</span>
+                                    <span className="task-description">{task.description}</span>
+                                </div>
+                                <div className="task-actions">
+                                    <FiEdit onClick={() => console.log('Edit task')} />
+                                    <FiTrash onClick={() => handleDeleteTask(task.id)} />
+                                    <FiRepeat onClick={() => handleTaskStatusToggle(task)} />
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </div>
         </div>

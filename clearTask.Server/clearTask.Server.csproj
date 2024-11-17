@@ -46,8 +46,4 @@
     <None Include="wwwroot\vite.svg" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Migrations\" />
-  </ItemGroup>
-
 </Project>

@@ -11,15 +11,11 @@ namespace clearTask.Server.Controllers
 {
     [ApiController]
     [Route("api/user")]
-    public class UserProfileController : ControllerBase
+    public class UserProfileController(UserManager<AppUserModel> userManager) : ControllerBase
     {
-        private readonly UserManager<AppUserModel> _userManager;
+        private readonly UserManager<AppUserModel> _userManager = userManager;
 
-        public UserProfileController(UserManager<AppUserModel> userManager)
-        {
-            _userManager = userManager;
-        }
-            [HttpPost("edit")]
+        [HttpPost("edit")]
         public async Task<IActionResult> UpdateProfile([FromBody] AppUserModel model)
         {
             Logger.InfoLog(model);

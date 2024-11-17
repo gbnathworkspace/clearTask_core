@@ -1,0 +1,102 @@
+/* Sidebar Container */
+.sidebar {
+    width: 280px;
+    padding: 20px;
+    background-color: #F7F7F5;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    align-self: flex-start; /* Prevents stretching */
+}
+
+    /* Header Styling */
+    .sidebar h3 {
+        font-size: 1.5rem;
+        color: #333;
+        font-weight: 600;
+        margin-bottom: 20px;
+    }
+
+/* List Items Styling */
+.list-items {
+    list-style: none;
+    padding: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+    .list-items li {
+        padding: 12px;
+        font-size: 1rem;
+        color: #555;
+        cursor: pointer;
+        border-radius: 8px;
+        text-align: center;
+        transition: all 0.3s ease;
+        border: 1px solid transparent;
+    }
+
+        /* Hover Effect */
+        .list-items li:hover {
+            background-color: #e0e0e0;
+            border-color: #ddd;
+        }
+
+/* Active List Item */
+.active-list {
+    background-color: #007bff;
+    color: #fff;
+    border: 1px solid #0056b3;
+}
+
+/* New List Button */
+.new-list-button {
+    padding: 12px;
+    width: 100%;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+}
+
+    /* Hover Effect for New List Button */
+    .new-list-button:hover {
+        background-color: #0056b3;
+    }
+
+/* Responsive Design for Mobile View */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        padding: 10px;
+        border-radius: 0;
+        box-shadow: none;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .list-items {
+        flex-direction: row;
+        gap: 5px;
+        justify-content: center;
+    }
+
+        .list-items li {
+            padding: 8px;
+            font-size: 0.9rem;
+        }
+
+    .new-list-button {
+        padding: 10px;
+        font-size: 0.9rem;
+    }
+}

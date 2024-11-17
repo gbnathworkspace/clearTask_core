@@ -11,35 +11,35 @@ namespace clearTask.Server.Controllers
 {
     [ApiController]
     [Route("api/task")]
-    public class TaskController : Controller
+    public class TaskController(ApplicationDbContext context) : Controller
     {
 
-        private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context = context;
 
-        public TaskController(ApplicationDbContext context)
-        {
-            _context = context;
-        }
+
 
         #region POST METHODS
         [Authorize]
         [HttpPost("createtask")]
-        public async Task<IActionResult> CreateTask([FromBody] TaskDTO taskModel)
+        public async Task<IActionResult> CreateTask([FromBody] TaskDTO TaskDto)
         {
             try
             {
-                if (ModelState.IsValid == false)
+                if (ModelState.IsValid == false || string.IsNullOrWhiteSpace(TaskDto.Title))
                 {
                     return BadRequest(new { message = "Invalid data", errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList() });
                 }
 
-                var taskEntity = new TaskModel
+                TaskModel taskEntity = new TaskModel
                 {
-                    Id = taskModel.Id,
-                    Title = taskModel.Title,
-                    Description = taskModel.Description,
-                    IsCompleted = taskModel.IsCompleted,
-                    UserId = taskModel.UserId
+                    Id = TaskDto.Id,
+                    Title = TaskDto.Title,
+                    Description = TaskDto.Description ?? string.Empty,
+                    IsCompleted = TaskDto.IsCompleted ?? false,
+                    Priority = (int?)(TaskDto.Priority) ?? (int)Priority.Def,
+                    DueDate = TaskDto.DueDate ?? null,
+                    UserId = TaskDto.UserId,
+                    ListId = string.IsNullOrWhiteSpace(TaskDto.ListId) ? TaskDto.UserId : TaskDto.ListId
                 };
 
                 _context.Tasks.Add(taskEntity);

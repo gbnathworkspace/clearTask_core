@@ -1,0 +1,95 @@
+/* --********************-- Login.tsx, Register.tsx */
+/* login container styling */
+.login-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100vw;
+    background-color: #ffffff;
+}
+
+.login-box {
+    background-color: white;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    padding: 40px;
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+}
+
+.logo {
+    width: 400px;
+    height: 100px;
+    top: 0;
+    left: 0;
+    position: absolute;
+}
+
+.login-title {
+    font-size: 64px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.login-input {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: white;
+    color: #333;
+}
+
+.login-button {
+    padding: 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.login-button:hover {
+    background-color: #0056b3;
+}
+
+.success-message {
+    color: #28a745;
+    margin-top: 10px;
+}
+
+.error-message {
+    color: #dc3545;
+    margin-top: 10px;
+}
+
+.register-link {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #666;
+}
+
+.link-text {
+    color: #007bff;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.link-text:hover {
+    color: #0056b3;
+}
+/* login container styling */
+/* --********************-- */
+

@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react';
-import { register } from '../authService';
+import { register } from '../services/authService';
 import { useNavigate } from 'react-router-dom';
-import styles from '../components/styles';
+import logo from '../assets/logo.png'; // Import your logo image
+
+
 
 // Rest of the code...
 
@@ -71,11 +73,13 @@ const Register: React.FC = () => {
 
 
     return (
-        <div style={styles.container}>
-            <div style={styles.relativediv}>
-                <form onSubmit={handleRegister}>
+        <div className="login-container">
+            <img src={logo} alt="Clear Task Logo" className="logo" />
+            <div className="login-box">
+                <h1 className="login-title">Register</h1>
+                <form onSubmit={handleRegister} className="login-form">
                     <input
-                    style={styles.formBox}
+                    className="login-input"
                     type="text"
                     placeholder="First Name"
                     value={firstName}
@@ -83,7 +87,7 @@ const Register: React.FC = () => {
                     required
                 />
                     <input
-                    style={styles.formBox}
+                    className="login-input"
                     type="text"
                     placeholder="Last Name"
                     value={lastName}
@@ -92,7 +96,7 @@ const Register: React.FC = () => {
                 />
 
                     <input
-                    style={styles.formBox}
+                    className="login-input"
                     type="email"
                     placeholder="Email"
                     value={email}
@@ -101,7 +105,7 @@ const Register: React.FC = () => {
                 />
 
                     <input
-                    style={styles.formBox}
+                    className="login-input"
                     type="password"
                     placeholder="Password"
                     value={password}
@@ -110,7 +114,7 @@ const Register: React.FC = () => {
                 />
 
                     <input
-                    style={styles.formBox}
+                    className="login-input"
                     type="password"
                     placeholder="Confirm Password"
                     value={confirmPassword}
@@ -119,7 +123,7 @@ const Register: React.FC = () => {
                 />
 
 
-                    <button style={styles.RegisterButton} type="submit">Register</button>
+                    <button className="login-button" type="submit" >Register</button>
             </form>
             {responseMessage && <p>{responseMessage}</p>}
             {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
@@ -130,9 +134,9 @@ const Register: React.FC = () => {
                     ))}
                 </ul>
                 )}
-                <div className= "register-form-text">
+                <div className="register-link">
                     Already have an Account? 
-                    <a onClick={NavigateToLogin} className="login-link">
+                    <a onClick={NavigateToLogin} className="link-text">
                      Login here
                     </a>
                 </div>

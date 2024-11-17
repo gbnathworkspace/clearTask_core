@@ -1,0 +1,124 @@
+/* Navbar Container */
+.navbar-container {
+    background-color: #F7F7F5;
+    padding: 10px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width:100%;
+}
+
+/* Navbar Flexbox */
+.navbar {
+    width: 98%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap:20px;
+}
+/* Logo Section */
+.logo-section {
+    display: flex;
+    align-items: center;
+    margin-left :auto;
+}
+
+.logo-image {
+    width: 150px;
+    height: auto;
+    max-height: 40px;
+    object-fit: contain; /* Ensures the logo scales without distortion */
+}
+
+
+/* Navbar Links */
+.navbar-links {
+    display: flex;
+    gap: 30px;
+    flex-grow: 1;
+}
+
+.nav-item {
+    color: #000000;
+    font-size: 1.2rem;
+    font-family: 'Instrument Sans', sans-serif;
+    cursor: pointer;
+    transition: color 0.2s;
+    font-weight: 500;
+}
+
+    .nav-item:hover {
+        color: #007bff;
+    }
+
+/* Search Bar Styling */
+.navbar-search {
+    display: flex;
+    justify-content: center;
+    max-width: 300px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #5F5E5B;
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: width 0.3s;
+    background-color: #F7F7F5;
+}
+
+    .search-input:focus {
+        width: 250px;
+        outline: none;
+        border-color: #007bff;
+    }
+
+/* Profile Section */
+.navbar-profile {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    cursor: pointer;
+    margin-left: auto;
+    gap:20px;
+    }
+
+    .navbar-profile img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+/* Profile Dropdown Styling */
+.profile-dropdown {
+    position: fixed;
+    top: 60px;
+    right: 10px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    width: 220px;
+    z-index: 2000;
+}
+
+    .profile-dropdown button {
+        width: 100%;
+        padding: 10px;
+        margin-top: 10px;
+        cursor: pointer;
+        border: none;
+        background-color: #007bff;
+        color: white;
+        border-radius: 5px;
+        font-size: 1rem;
+        transition: background-color 0.2s ease;
+    }
+
+        .profile-dropdown button:hover {
+            background-color: #0056b3;
+        }

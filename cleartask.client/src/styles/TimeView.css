@@ -1,0 +1,77 @@
+/* Page Container */
+.time-view-page {
+    height: 100vh;
+    width: 100vw;
+    background-color: #ffffff;
+    overflow: hidden;
+}
+
+    /* Heading */
+    .time-view-page h2 {
+        font-size: 2rem;
+        margin-bottom: 150px;
+        color: #333;
+    }
+.timeview-content {
+    display: flex;
+    margin-left: -120px;
+    margin-top: 80px;
+    height: 100vh;
+    background-color: #ffffff;
+}
+
+/* Timeline Container */
+.timeline-container {
+    position: relative;
+    width: 70%;
+    height: 300px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    margin-left: 60px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+/* Timeline Line */
+.timeline {
+    position: relative;
+    height: 2px;
+    background-color: #333;
+    margin-top: 80px;
+}
+
+/* Task Bubble */
+.timeline-task {
+    position: absolute;
+    bottom: 20px;
+    transform: translateX(-50%);
+}
+
+.task-bubble {
+    padding: 8px 12px;
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    color: #333;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.task-line {
+    width: 1px;
+    height: 40px;
+    background-color: #333;
+    margin: 0 auto;
+}
+
+/* Timeline Scale */
+.timeline-scale {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.timeline-label {
+    font-size: 0.8rem;
+    color: #666;
+}

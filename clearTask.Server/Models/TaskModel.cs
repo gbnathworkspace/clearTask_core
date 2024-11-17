@@ -10,11 +10,16 @@ namespace clearTask.Server.Models
         public  string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public bool IsCompleted { get; set; }
-
-        [Required]
-        public string UserId { get; set; }
+        public DateTime? DueDate { get; set; }
+        public int Priority { get; set; } = 0;
+        public required string UserId { get; set; }
 
         [ForeignKey("UserId")]
         public AppUserModel? User { get; set; }
+
+        public string ListId { get; set; } = string.Empty;
+
+        [ForeignKey("ListId")]
+        public TaskListModel? TaskList { get; set; }
     }
 }

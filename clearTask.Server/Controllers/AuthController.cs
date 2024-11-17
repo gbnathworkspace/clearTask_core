@@ -17,14 +17,16 @@ namespace clearTask.Server.Controllers
         private readonly UserManager<AppUserModel> _userManager;
         private readonly SignInManager<AppUserModel> _signInManager;
         private readonly IConfiguration _configuration;
+        private readonly ApplicationDbContext _context;
 
         public AuthController(UserManager<AppUserModel> userManager,
                               SignInManager<AppUserModel> signInManager,
-                              IConfiguration configuration)
+                              IConfiguration configuration, ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _configuration = configuration;
+            _context = context;
         }
         #endregion
 
@@ -70,6 +72,17 @@ namespace clearTask.Server.Controllers
                 };
 
                 IdentityResult result = await _userManager.CreateAsync(user, model.Password);
+
+                if (result.Succeeded)
+                {
+                    TaskListController taskController = new TaskListController(_context);
+                    TaskListModel taskList = new();
+                    taskList.AppUser = user;
+                    taskList.UserId = user.Id; ;
+                    taskList.Name = Utils.homeList;
+                    taskList.ListId = user.Id;
+                    await taskController.CreateList(taskList);
+                }
 
                 if (!result.Succeeded)
                 {

@@ -1,0 +1,176 @@
+.tasks-page {
+    height: 100vh;
+    width: 100vw;
+    background-color: #ffffff;
+    overflow: hidden;
+}
+
+.tasks-content {
+    display: flex;
+    margin-left: -120px;
+    margin-top: 80px;
+    height: 100vh;
+    background-color: #ffffff;
+}
+.main-content {
+    flex: 1;
+    background-color: #F7F7F5;
+    padding: 40px;
+    padding-bottom: 100px;
+    margin-left: 100px;
+    margin-right: 100px;
+    height: 55vh;
+    max-height: 100vh;
+    overflow-y: scroll; /* Always reserve scrollbar space */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    box-sizing: border-box;
+    scrollbar-gutter: stable; /* Reserve space for scrollbar */
+}
+
+    /* Hide scrollbar initially */
+    .main-content::-webkit-scrollbar {
+        width: 12px; /* Set fixed width */
+        opacity: 0; /* Make scrollbar transparent */
+    }
+
+    /* Show scrollbar on hover */
+    .main-content:hover::-webkit-scrollbar {
+        opacity: 1; /* Make scrollbar visible */
+    }
+
+    .main-content::-webkit-scrollbar-track {
+        background: #f0f0f0;
+        border-radius: 10px;
+    }
+
+    .main-content::-webkit-scrollbar-thumb {
+        background-color: #3498db;
+        border-radius: 10px;
+        border: 3px solid #f0f0f0;
+    }
+
+/* For Firefox */
+.main-content {
+    scrollbar-width: thin;
+    scrollbar-color: #3498db #f0f0f0;
+}
+
+
+.content-container {
+    display: flex;
+    flex: 1;
+}
+
+
+.task-input-bar {
+    display: flex;
+    gap: 10px;
+}
+
+    .task-input-bar input {
+        flex: 1;
+        padding: 10px;
+        border-radius: 5px;
+        background-color: #666666;
+    }
+
+/* Task List Container */
+.task-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #666666;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Task Card */
+.task-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
+    cursor: pointer;
+}
+
+    /* Task Card Hover Effect */
+    .task-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+
+/* Task Details */
+.task-details {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 5px;
+}
+
+.task-title {
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: #333333;
+}
+
+.task-description {
+    font-size: 0.9rem;
+    color: #666666;
+}
+
+/* Task Actions */
+.task-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: black;
+    font-weight: 100;
+}
+
+    .task-actions svg {
+        width: 24px;
+        height: 24px;
+        cursor: pointer;
+        transition: color 0.2s ease;
+        font-weight :100;
+    }
+
+        /* Icon Hover Effect */
+        .task-actions svg:hover {
+            color: #007bff;
+            font-weight: 100;
+        }
+
+.completed-tasks{
+    color:black;
+    flex-direction:column;
+    gap: 15px;
+}
+
+input[type="text"] {
+    color: #000000; /* Text color (e.g., blue) */
+    font-size: 16px; /* Font size */
+    padding: 10px; /* Padding for better appearance */
+    border: 1px solid #ccc; /* Border style */
+    border-radius: 5px; /* Rounded corners */
+    background-color: #f9f9f9; /* Background color */
+}
+
+
+/* Priority Colors */
+.high-priority {
+    background-color: #ffcccc;
+}
+
+.medium-priority {
+    background-color: #fff0b3;
+}
+
+.low-priority {
+    background-color: #ccffcc;
+}

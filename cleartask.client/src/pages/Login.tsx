@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from 'react';
-import { login } from '../authService';
-import styles from '../components/styles';
+import { login } from '../services/authService';
 import { useNavigate } from 'react-router-dom';
-
+import logo from '../assets/logo.png'; // Import your logo image
+import '../styles/Login.css';
 
 interface LoginResponse {
     token: string;
@@ -12,31 +12,19 @@ interface LoginResponse {
 
 interface ErrorResponse {
     message: string;
-    // Add other properties if needed
-}
-
-interface ErrorResponse {
-    message: string;
     errors?: string[];
 }
+
 const Login: React.FC = () => {
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
-    const [responseMessage, setResponseMessage] = useState<string | null>(null);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
-    const [errorDetails, setErrorDetails] = useState<string[] | null>(null);
-    const Navigate = useNavigate();
+    const navigate = useNavigate();
 
-
-    const NavigateToRegister = () => {
-        Navigate('/register')
-    };
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
-        setResponseMessage(null);
         setErrorMessage(null);
-        setErrorDetails(null);
         setSuccessMessage(null);
         try {
             const response = await login(email, password);
@@ -44,70 +32,45 @@ const Login: React.FC = () => {
             sessionStorage.setItem('token', responseData.token);
             sessionStorage.setItem('userid', responseData.userid);
 
-            console.log('Token stored in sessionStorage:', sessionStorage.getItem('token'));
-            console.log('UserId stored in sessionStorage:', sessionStorage.getItem('userid'));
-
             console.log('Login successful:', responseData.token);
-            setSuccessMessage('Login successful:')
-            Navigate('/home')
-        } catch (error) {
-            if (isErrorResponse(error)) {
-                const errorData: ErrorResponse = error.response.data;
-                const serverErrorMessage = errorData.message || 'Login failed';
-                setErrorMessage(serverErrorMessage);
-                setErrorDetails(errorData.errors || []);
-                console.error('Registration failed:', serverErrorMessage);
-            } else if (error instanceof Error) {
-                setErrorMessage(error.message);
-                console.error('An unexpected error occurred:', error.message);
-            } else {
-                setErrorMessage('An unexpected error occurred');
-                console.error('An unexpected error occurred:', error);
-            }
+            setSuccessMessage('Login successful!');
+            navigate('/home');
+        } catch (error: any) {
+            const errorData: ErrorResponse = error.response?.data || { message: 'Login failed' };
+            setErrorMessage(errorData.message);
+            console.error('Error during login:', errorData.message);
         }
     };
 
-    const isErrorResponse = (error: unknown): error is { response: { data: ErrorResponse } } => {
-        return typeof error === 'object' && error !== null && 'response' in error && 'data' in (error as any).response;
-    };
-
     return (
-        <div style={styles.container}>
-            <div style={styles.relativediv}>
-        <form onSubmit={handleLogin}>
-            <input
-                style={styles.formBox}
-                type="email"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-            />
-                <input
-                style={styles.formBox}
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
+        <div className="login-container">
+            <img src={logo} alt="Clear Task Logo" className="logo" />
+            <div className="login-box">
+                <h1 className="login-title">Log in</h1>
+                <form onSubmit={handleLogin} className="login-form">
+                    <input
+                        className="login-input"
+                        type="email"
+                        placeholder="Email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
                     />
-                    <button style={styles.RegisterButton} type="submit">Login</button>
+                    <input
+                        className="login-input"
+                        type="password"
+                        placeholder="Password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                    />
+                    <button className="login-button" type="submit">Login</button>
                 </form>
-                {successMessage && <p>{successMessage}</p>}
-                {responseMessage && <p>{responseMessage}</p>}
-                {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
-                {errorDetails && errorDetails.length > 0 && (
-                    <ul style={{ color: 'red' }}>
-                        {errorDetails.map((error, index) => (
-                            <li key={index}>{error}</li>
-                        ))}
-                    </ul>
-                )}
-                <div className="register-form-text">
-                    Dont have an Account?
-                    <a onClick={NavigateToRegister} className="login-link">
-                        Register here
-                    </a>
+                {successMessage && <p className="success-message">{successMessage}</p>}
+                {errorMessage && <p className="error-message">{errorMessage}</p>}
+                <div className="register-link">
+                    Don't have an account?{' '}
+                    <a onClick={() => navigate('/register')} className="link-text">Register here</a>
                 </div>
             </div>
         </div>

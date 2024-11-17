@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace clearTask.Server.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class listmigrations : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -163,6 +163,25 @@ namespace clearTask.Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "TaskListModels",
+                columns: table => new
+                {
+                    ListId = table.Column<string>(type: "text", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    UserId = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TaskListModels", x => x.ListId);
+                    table.ForeignKey(
+                        name: "FK_TaskListModels_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Tasks",
                 columns: table => new
                 {
@@ -171,7 +190,9 @@ namespace clearTask.Server.Migrations
                     Title = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: false),
                     IsCompleted = table.Column<bool>(type: "boolean", nullable: false),
-                    UserId = table.Column<string>(type: "text", nullable: false)
+                    DueDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    UserId = table.Column<string>(type: "text", nullable: false),
+                    ListId = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -181,6 +202,12 @@ namespace clearTask.Server.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Tasks_TaskListModels_ListId",
+                        column: x => x.ListId,
+                        principalTable: "TaskListModels",
+                        principalColumn: "ListId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -222,6 +249,16 @@ namespace clearTask.Server.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_TaskListModels_UserId",
+                table: "TaskListModels",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tasks_ListId",
+                table: "Tasks",
+                column: "ListId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Tasks_UserId",
                 table: "Tasks",
                 column: "UserId");
@@ -250,6 +287,9 @@ namespace clearTask.Server.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "TaskListModels");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
