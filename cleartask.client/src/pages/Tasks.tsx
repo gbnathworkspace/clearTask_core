@@ -36,7 +36,8 @@ const Tasks: React.FC = () => {
             description: newTaskDescription,
             DueDate: dueDate ? dueDate.toISOString() : undefined,
             priority: newTaskPriority,
-            isCompleted: false
+            isCompleted: false,
+            listId: ""
         }
 
         try {

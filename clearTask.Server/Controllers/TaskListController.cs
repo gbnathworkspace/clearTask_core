@@ -22,7 +22,7 @@ namespace clearTask.Server.Controllers
         {
             try
             {
-                TaskListModel taskModel = await _context.TaskListModels.FindAsync(userId) ?? new TaskListModel() { ListId = "", AppUser = null};
+                TaskListModel taskModel = await _context.TaskListModels.FindAsync(userId) ?? new TaskListModel() { ListId = "", AppUser = null };
 
                 return Ok(new { tskMdl = taskModel });
 
@@ -40,10 +40,14 @@ namespace clearTask.Server.Controllers
             try
             {
                 await _context.TaskListModels.AddAsync(taskListModel);
-                return Ok(new { Message = "Inserted List success"});
+                await _context.SaveChangesAsync();
+
+                return Ok(new { Message = "Inserted List success" });
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return StatusCode(500, new { message = ex.Message });
+            }
+        }
     }
-}
+}    

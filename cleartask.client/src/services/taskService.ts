@@ -15,6 +15,7 @@ export interface Task {
     userId: string;
     DueDate?: string;
     priority?: number;
+    listId: string;
 }
 
 export interface TaskList {
