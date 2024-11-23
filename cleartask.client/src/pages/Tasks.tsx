@@ -11,9 +11,11 @@ const Tasks: React.FC = () => {
     const [newTaskTitle, setNewTaskTitle] = useState('');
     const [newTaskDescription, setNewTaskDescription] = useState('');
     const [newTaskPriority, setNewTaskPriority] = useState(0);
-    const [dueDate, setDueDate] = useState<Date | null>(null);
+    const [dueDate, setDueDate] = useState('');
     const [selectedList, setSelectedList] = useState('Groceries');
     const userId = sessionStorage.getItem('userid') || '';
+    const listId = userId;
+
 
     useEffect(() => {
         fetchTasks();
@@ -21,10 +23,11 @@ const Tasks: React.FC = () => {
 
     const fetchTasks = async () => {
         try {
-            const response = await getAllTasks(userId);
+            const response = await getAllTasks(userId, listId);
             setTasks(response.data.tasks);
+            console.log(response.data.tasks);
         } catch (error) {
-            console.error('Error fetching tasks', error);
+            console.error('Error fetching tassssks', error);
         }
     };
 
@@ -34,11 +37,13 @@ const Tasks: React.FC = () => {
             title: newTaskTitle,
             userId: userId,
             description: newTaskDescription,
-            DueDate: dueDate ? dueDate.toISOString() : undefined,
+            dueDate: new Date(dueDate),
             priority: newTaskPriority,
             isCompleted: false,
             listId: ""
         }
+
+        console.log("due", dueDate);
 
         try {
             await createTask(newTask);
@@ -46,7 +51,7 @@ const Tasks: React.FC = () => {
             setNewTaskTitle('');
             setNewTaskDescription('');
             setNewTaskPriority(0);
-            setDueDate(null);
+            setDueDate('');
         } catch (error) {
             console.error('Error creating task', error);
         }
@@ -63,20 +68,20 @@ const Tasks: React.FC = () => {
 
     const handleDeleteTask = async (taskId: number) => {
         try {
-            await deleteTask({ id: taskId, userId });
+            await deleteTask(taskId);
             fetchTasks();
         } catch (error) {
             console.error('Error deleting task', error);
         }
     };
 
-    const getPriorityColor = (priority: string) => {
+    const getPriorityColor = (priority: number) => {
         switch (priority) {
-            case 'High':
+            case 3:
                 return '#ffcccc';
-            case 'Medium':
+            case 2:
                 return '#fff0b3';
-            case 'Low':
+            case 1:
                 return '#ccffcc';
             default:
                 return '#f2f2f2';
@@ -100,10 +105,11 @@ const Tasks: React.FC = () => {
                         <input
                             type="date"
                             placeholder="Due Date"
-                            value={dueDate ? dueDate.toISOString().split('T')[0] : ''}
-                            onChange={(e) => setDueDate(new Date(e.target.value))}
+                            value={dueDate ? new Date(dueDate).toISOString().split('T')[0] : ''}
+                            onChange={(e) => setDueDate(e.target.value)} // Pass string directly
                             className="due-date-input"
                         />
+
                         <button onClick={handleAddTask}>
                             <FiCalendar />
                         </button>
@@ -120,6 +126,18 @@ const Tasks: React.FC = () => {
                                 <div className="task-details">
                                     <span className="task-title">{task.title}</span>
                                     <span className="task-description">{task.description}</span>
+                                    {task.dueDate && (
+                                        <div className="task-due-date">
+                                            <FiCalendar className="calendar-icon" />
+                                            <span>
+                                                {new Date(task.dueDate).toLocaleDateString('en-US', {
+                                                    month: 'long',
+                                                    day: 'numeric',
+                                                    year: 'numeric',
+                                                })}
+                                            </span>
+                                        </div>
+                                    )}
                                 </div>
                                 <div className="task-actions">
                                     <FiEdit onClick={() => console.log('Edit task')} />

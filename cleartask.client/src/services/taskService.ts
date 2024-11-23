@@ -13,13 +13,14 @@ export interface Task {
     description: string;
     isCompleted: boolean;
     userId: string;
-    DueDate?: string;
-    priority?: number;
+    dueDate: Date;
+    priority: number;
     listId: string;
 }
 
+
 export interface TaskList {
-    id: number;
+    listId: string;
     name: string;
     userId: string;
 }
@@ -37,7 +38,8 @@ const token = sessionStorage.getItem('token'); // Retrieve token each time
 
 
 // Set the base URL for your API
-const API_BASE_URL = 'http://localhost:5076/api/task'; // Adjust the port if necessary
+const API_BASE_URL = 'http://localhost:5076/api/task';
+const API_BASE_URL_ = 'http://localhost:5076/api';// Adjust the port if necessary
 
 export const getAllLists = async (userId: string): Promise<{ data: GetListResponse }> => {
     if (!token) {
@@ -45,7 +47,7 @@ export const getAllLists = async (userId: string): Promise<{ data: GetListRespon
         throw new Error('Unauthorized');
     }
 
-    return await axios.get(`${API_BASE_URL}/getalllists`, {
+    return await axios.get(`${API_BASE_URL_}/list/getlists`, {
         headers: {
             Authorization: `Bearer ${token}`
         },
@@ -59,7 +61,7 @@ export const createList = async (list: TaskList) => {
         throw new Error('Unauthorized');
     }
 
-    return await axios.post(`${API_BASE_URL}/createlist`, list, {
+    return await axios.post(`${API_BASE_URL_}/list/createlist`, list, {
         headers:
         {
             Authorization: `Bearer ${token}`
@@ -69,18 +71,22 @@ export const createList = async (list: TaskList) => {
 
 
 // Function to get all tasks for a specific user
-export const getAllTasks = async (userId: string): Promise<{ data: GetTasksResponse }> => {
+export const getAllTasks = async (userId: string, listId: string): Promise<{ data: GetTasksResponse }> => {
     if (!token) {
         console.error('No token found in session storage');
         throw new Error('Unauthorized');
     }
 
-    return await axios.get(`${API_BASE_URL}/getalltasks`, {
-        headers: {
-            Authorization: `Bearer ${token}`
-        },
-        params: { userId },
-    });
+    return await axios.post(
+        `${API_BASE_URL}/getalltasks`,
+        { userId, listId }, // Body of the request
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json', // Ensure JSON content type
+            },
+        }
+    );
 };
 
 // Function to create a new task
@@ -100,6 +106,7 @@ export const createTask = async (task: Task) => {
         },
     });
 };
+
 
 // Function to update the completion status of a task
 export const updateTaskStatus = async (taskId: number, isCompleted: boolean) => {
@@ -121,7 +128,7 @@ export const updateTaskStatus = async (taskId: number, isCompleted: boolean) => 
 };
 
 // Function to delete a task
-export const deleteTask = async (task: { id: number, userId: string }) => {
+export const deleteTask = async (Id: number) => {
     const token = sessionStorage.getItem('token'); // Retrieve token each time
     if (!token) {
         console.error('No token found in session storage');
@@ -129,11 +136,14 @@ export const deleteTask = async (task: { id: number, userId: string }) => {
     }
 
     // Make the Axios request to delete the task
-    return await axios.post(`${API_BASE_URL}/deletetask`, task, {
-        headers: {
-            'Content-Type': 'application/json', // Ensure JSON format
+    return await axios.post(`${API_BASE_URL}/deletetask`, null, {
+        headers: { 
             Authorization: `Bearer ${token}`,
         },
+        params: { Id : Id },
     });
 };
+
+
+//lists
 

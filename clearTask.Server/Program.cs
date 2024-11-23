@@ -118,6 +118,7 @@ app.UseRouting();
 
 app.UseCors("AllowAllOrigins"); // Enable the CORS policy
 
+
 app.UseAuthentication();
 app.UseAuthorization();
 

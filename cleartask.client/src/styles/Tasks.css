@@ -86,6 +86,14 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+.task-due-date {
+    color: #3498db;
+    font-size: 0.9rem;
+    margin-top: 5px;
+    display: block;
+}
+
+
 /* Task Card */
 .task-card {
     display: flex;

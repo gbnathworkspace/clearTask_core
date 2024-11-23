@@ -28,4 +28,10 @@
         public string ListId { get; set; }
     }
 
+    public class getTaskDto
+    {
+        public string userId { get; set; } = "";
+        public string listId { get; set; } = "";
+
+    }
 }

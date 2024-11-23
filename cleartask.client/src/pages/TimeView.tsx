@@ -8,11 +8,12 @@ const TimeView: React.FC = () => {
     const [tasks, setTasks] = useState<Task[]>([]);
     const [selectedList, setSelectedList] = useState('Groceries');
     const userId = sessionStorage.getItem("userid") || "";
+    const listId = userId;
 
     useEffect(() => {
         const fetchTasks = async () => {
             try {
-                const allTasks = await getAllTasks(userId);
+                const allTasks = await getAllTasks(userId, listId);
                 console.log(allTasks.data.tasks);
 
                 // If the API response does not include 'time', map it with a default value

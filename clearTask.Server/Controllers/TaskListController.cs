@@ -7,6 +7,7 @@ using System.Security.Claims;
 using clearTask.Server.Models;
 using clearTask.Server;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 
 namespace clearTask.Server.Controllers
 {
@@ -18,13 +19,25 @@ namespace clearTask.Server.Controllers
 
         [Authorize]
         [HttpGet("getlists")]
-        public async Task<IActionResult> GetLists(int userId)
+        public async Task<IActionResult> GetLists(string userId)
         {
             try
             {
-                TaskListModel taskModel = await _context.TaskListModels.FindAsync(userId) ?? new TaskListModel() { ListId = "", AppUser = null };
+                if (string.IsNullOrWhiteSpace(userId))
+                {
+                    return BadRequest("userId is empty");
+                }
 
-                return Ok(new { tskMdl = taskModel });
+                List<TaskListModel> taskLists = await _context.TaskListModels
+                .Where(list => list.UserId == userId)
+                .ToListAsync();  // Asynchronously converting the IQueryable to List
+
+                if (!taskLists.Any())  // Checking if the list is empty
+                {
+                    return NotFound(new { message = "No lists found for this user." });
+                }
+
+                return Ok(new { lists = taskLists });
 
             }
             catch (Exception ex)
@@ -39,6 +52,9 @@ namespace clearTask.Server.Controllers
         {
             try
             {
+                if(string.IsNullOrWhiteSpace(taskListModel.ListId))
+                    taskListModel.ListId = Guid.NewGuid().ToString();
+
                 await _context.TaskListModels.AddAsync(taskListModel);
                 await _context.SaveChangesAsync();
 

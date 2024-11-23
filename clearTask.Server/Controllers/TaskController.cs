@@ -16,8 +16,6 @@ namespace clearTask.Server.Controllers
 
         private readonly ApplicationDbContext _context = context;
 
-
-
         #region POST METHODS
         [Authorize]
         [HttpPost("createtask")]
@@ -25,7 +23,7 @@ namespace clearTask.Server.Controllers
         {
             try
             {
-                if (ModelState.IsValid == false || string.IsNullOrWhiteSpace(TaskDto.Title))
+                 if (ModelState.IsValid == false || string.IsNullOrWhiteSpace(TaskDto.Title))
                 {
                     return BadRequest(new { message = "Invalid data", errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList() });
                 }
@@ -37,7 +35,7 @@ namespace clearTask.Server.Controllers
                     Description = TaskDto.Description ?? string.Empty,
                     IsCompleted = TaskDto.IsCompleted ?? false,
                     Priority = (int?)(TaskDto.Priority) ?? (int)Priority.Def,
-                    DueDate = TaskDto.DueDate ?? null,
+                    DueDate = DateTime.SpecifyKind(TaskDto.DueDate.Value, DateTimeKind.Utc),
                     UserId = TaskDto.UserId,
                     ListId = string.IsNullOrWhiteSpace(TaskDto.ListId) ? TaskDto.UserId : TaskDto.ListId
                 };
@@ -55,18 +53,18 @@ namespace clearTask.Server.Controllers
 
         [Authorize]
         [HttpPost("deletetask")]
-        public async Task<IActionResult> DeleteTask([FromBody] TaskDTO taskDTO)
+        public async Task<IActionResult> DeleteTask([FromQuery] int Id)
         {
             try
             {
-                if (taskDTO == null)
+                if (Id == null)
                 {
                     return BadRequest(new { message = "Invalid data", errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList() });
                 }
-                TaskModel task = await _context.Tasks.FindAsync(taskDTO.Id);
+                TaskModel? task = await _context.Tasks.FindAsync(Id);
                 if (task == null)
                 {
-                    return NotFound(new { message = "Task not found", taskId = taskDTO });
+                    return NotFound(new { message = "Task not found", taskId = Id });
                 }
                 _context.Tasks.Remove(task);
                 await _context.SaveChangesAsync();
@@ -74,7 +72,7 @@ namespace clearTask.Server.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "Internal Server Error", taskid = taskDTO, error = ex.Message });
+                return StatusCode(500, new { message = "Internal Server Error", taskid = Id, error = ex.Message });
             }
         }
 
@@ -117,22 +115,34 @@ namespace clearTask.Server.Controllers
         }
 
         [Authorize]
-        [HttpGet("getalltasks")]
-        public async Task<IActionResult> GetAllTasks([FromQuery] string userId)
+        [HttpPost("getalltasks")]
+        public async Task<IActionResult> GetAllTasks([FromBody] getTaskDto getTaskDto)
         {
             try
             {
+
+                if (string.IsNullOrWhiteSpace(getTaskDto.userId) || string.IsNullOrWhiteSpace(getTaskDto.listId))
+                {
+                    return BadRequest("Id and ListId are required.");
+                }
+
+
                 var tasks = await _context.Tasks
-                    .Where(t => t.UserId == userId)
+                    .Where(t => t.UserId == getTaskDto.userId && t.ListId == getTaskDto.listId)
                     .Select(t => new TaskDTO
                     {
                         Id = t.Id,
-                        Title = t.Title,
-                        Description = t.Description,
-                        IsCompleted = t.IsCompleted,
-                        UserId = t.UserId
+                        Title = t.Title ?? string.Empty, // Handle null by defaulting to an empty string
+                        Description = t.Description ?? string.Empty, // Handle null by defaulting to an empty string
+                        IsCompleted = t.IsCompleted, // Boolean cannot be null
+                        UserId = t.UserId ?? string.Empty, // Handle null by defaulting to an empty string
+                        DueDate = t.DueDate != null ? DateTime.SpecifyKind(t.DueDate, DateTimeKind.Utc) : (DateTime?)null, // Handle null for DueDate
+                        Priority = t.Priority != null ? (Priority)t.Priority : Priority.Def, // Handle null by defaulting to Priority.Default
+                        ListId = t.ListId ?? string.Empty, // Handle null by defaulting to an empty string
                     })
                     .ToListAsync();
+
+
 
                 return Ok(new { tasks = tasks });
             }
