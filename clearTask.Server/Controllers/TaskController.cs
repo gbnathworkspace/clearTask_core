@@ -4,17 +4,64 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Concurrent;
 using System.Diagnostics;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace clearTask.Server.Controllers
 {
     [ApiController]
     [Route("api/task")]
-    public class TaskController(ApplicationDbContext context) : Controller
+    public class TaskController : Controller
     {
 
-        private readonly ApplicationDbContext _context = context;
+        private readonly ApplicationDbContext _context;
+        private const string DEMO_USER_ID = "demo-user";
+        private static readonly ConcurrentDictionary<string, List<TaskModel>> _demoTasks = new();
+        private static int _demoTaskIdCounter = 1;
+
+        public TaskController(ApplicationDbContext context)
+        {
+            _context = context;
+            InitializeDemoTasks();
+        }
+
+        private void InitializeDemoTasks()
+        {
+            // Initialize demo tasks if not already done
+            if (!_demoTasks.ContainsKey(DEMO_USER_ID))
+            {
+                var initialTasks = new List<TaskModel>
+            {
+                new TaskModel
+                {
+                    Id = _demoTaskIdCounter++,
+                    Title = "Complete Project Presentation",
+                    Description = "Prepare slides for the quarterly review",
+                    IsCompleted = false,
+                    DueDate = DateTime.UtcNow.AddDays(7),
+                    Priority = (int)Priority.High,
+                    UserId = DEMO_USER_ID,
+                    ListId = "demo-list-1"
+                },
+                new TaskModel
+                {
+                    Id = _demoTaskIdCounter++,
+                    Title = "Buy Groceries",
+                    Description = "Get milk, eggs, and bread",
+                    IsCompleted = false,
+                    DueDate = DateTime.UtcNow.AddDays(2),
+                    Priority = (int)Priority.Low,
+                    UserId = DEMO_USER_ID,
+                    ListId = "demo-list-1"
+                }
+            };
+                _demoTasks.TryAdd(DEMO_USER_ID, initialTasks);
+            }
+        }
+
+
 
         #region POST METHODS
         [Authorize]
@@ -27,6 +74,37 @@ namespace clearTask.Server.Controllers
                 {
                     return BadRequest(new { message = "Invalid data", errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList() });
                 }
+
+
+
+                #region DEMO USER
+                if (TaskDto.UserId == DEMO_USER_ID)
+                {
+                    var demoTask = new TaskModel
+                    {
+                        Id = Interlocked.Increment(ref _demoTaskIdCounter),
+                        Title = TaskDto.Title,
+                        Description = TaskDto.Description ?? string.Empty,
+                        IsCompleted = TaskDto.IsCompleted ?? false,
+                        Priority = (int?)(TaskDto.Priority) ?? 0,
+                        DueDate = TaskDto.DueDate ?? DateTime.UtcNow,
+                        UserId = DEMO_USER_ID,
+                        ListId = TaskDto.ListId ?? DEMO_USER_ID
+                    };
+
+                    _demoTasks.AddOrUpdate(
+                        DEMO_USER_ID,
+                        new List<TaskModel> { demoTask },
+                        (key, existingList) =>
+                        {
+                            existingList.Add(demoTask);
+                            return existingList;
+                        });
+
+                    return Ok(new { message = "Task created", taskId = demoTask.Id });
+                }
+                #endregion
+
 
                 TaskModel taskEntity = new TaskModel
                 {
@@ -57,6 +135,18 @@ namespace clearTask.Server.Controllers
         {
             try
             {
+                #region DEMO USER
+                if (_demoTasks.TryGetValue(DEMO_USER_ID, out var demoUserTasks))
+                {
+                    var demoTask = demoUserTasks.FirstOrDefault(t => t.Id == Id);
+                    if (demoTask != null)
+                    {
+                        demoUserTasks.Remove(demoTask);
+                        return Ok(new { Message = "Task Deleted Successfully" });
+                    }
+                }
+                #endregion
+
                 if (Id == null)
                 {
                     return BadRequest(new { message = "Invalid data", errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList() });
@@ -81,6 +171,20 @@ namespace clearTask.Server.Controllers
         {
             try
             {
+                #region DEMO USER
+                // Check if dealing with demo user tasks
+                if (_demoTasks.TryGetValue(DEMO_USER_ID, out var demoUserTasks))
+                {
+                    var demoTask = demoUserTasks.FirstOrDefault(t => t.Id == taskID);
+                    if (demoTask != null)
+                    {
+                        demoTask.IsCompleted = isCompleted;
+                        return Ok(new { Message = "Task updated", status = isCompleted });
+                    }
+                }
+                #endregion
+
+
                 TaskModel task = await _context.Tasks.FindAsync(taskID);
                 if (task == null)
                     return BadRequest(new { Message = "task not found" });
@@ -102,6 +206,36 @@ namespace clearTask.Server.Controllers
         {
             try
             {
+                #region DEMO USER
+                // Check session user ID first
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                if (userId == DEMO_USER_ID)
+                {
+                    // Handle demo user
+                    if (_demoTasks.TryGetValue(DEMO_USER_ID, out var demoUserTasks))
+                    {
+                        var demoTask = demoUserTasks.FirstOrDefault(t => t.Id == taskid);
+                        if (demoTask != null)
+                        {
+                            var taskDto = new TaskDTO
+                            {
+                                Id = demoTask.Id,
+                                Title = demoTask.Title,
+                                Description = demoTask.Description,
+                                IsCompleted = demoTask.IsCompleted,
+                                UserId = demoTask.UserId,
+                                DueDate = demoTask.DueDate,
+                                Priority = (Priority)demoTask.Priority,
+                                ListId = demoTask.ListId
+                            };
+                            return Ok(new { task = taskDto });
+                        }
+                    }
+                    return NotFound(new { message = "Task not found" });
+                }
+                #endregion
+
                 TaskModel task = await _context.Tasks.FindAsync(taskid);
                 if (task == null)
                     return BadRequest(new { Message = "task not found" });
@@ -126,6 +260,32 @@ namespace clearTask.Server.Controllers
                     return BadRequest("Id and ListId are required.");
                 }
 
+
+                #region DEMO USER
+                // Return demo tasks for demo user
+                if (getTaskDto.userId == DEMO_USER_ID)
+                {
+                    if (_demoTasks.TryGetValue(DEMO_USER_ID, out var demoUserTasks))
+                    {
+                        var filteredTasks = demoUserTasks
+                            .Where(t => t.ListId == getTaskDto.listId)
+                            .Select(t => new TaskDTO
+                            {
+                                Id = t.Id,
+                                Title = t.Title,
+                                Description = t.Description,
+                                IsCompleted = t.IsCompleted,
+                                UserId = t.UserId,
+                                DueDate = t.DueDate,
+                                Priority = (Priority)t.Priority,
+                                ListId = t.ListId
+                            })
+                            .ToList();
+
+                        return Ok(new { tasks = filteredTasks });
+                    }
+                }
+                #endregion
 
                 var tasks = await _context.Tasks
                     .Where(t => t.UserId == getTaskDto.userId && t.ListId == getTaskDto.listId)

@@ -13,7 +13,7 @@ export interface Task {
     description: string;
     isCompleted: boolean;
     userId: string;
-    dueDate: Date;
+    dueDate?: Date;
     priority: number;
     listId: string;
 }
@@ -42,6 +42,8 @@ const API_BASE_URL = 'http://localhost:5076/api/task';
 const API_BASE_URL_ = 'http://localhost:5076/api';// Adjust the port if necessary
 
 export const getAllLists = async (userId: string): Promise<{ data: GetListResponse }> => {
+    const token = sessionStorage.getItem('token'); // Retrieve token each time
+
     if (!token) {
         console.error('No token found in session storage');
         throw new Error('Unauthorized');
@@ -56,6 +58,8 @@ export const getAllLists = async (userId: string): Promise<{ data: GetListRespon
 }
 
 export const createList = async (list: TaskList) => {
+    const token = sessionStorage.getItem('token'); // Retrieve token each time
+
     if (!token) {
         console.error('No token found in session storage');
         throw new Error('Unauthorized');
@@ -72,6 +76,8 @@ export const createList = async (list: TaskList) => {
 
 // Function to get all tasks for a specific user
 export const getAllTasks = async (userId: string, listId: string): Promise<{ data: GetTasksResponse }> => {
+    const token = sessionStorage.getItem('token'); // Retrieve token each time
+
     if (!token) {
         console.error('No token found in session storage');
         throw new Error('Unauthorized');
@@ -145,5 +151,18 @@ export const deleteTask = async (Id: number) => {
 };
 
 
-//lists
-
+export const fetchTasks = async (
+    userId: string,
+    listId: string
+): Promise<any[]> => {
+    try {
+        const response = await getAllTasks(userId, listId);
+        if (response && response.data && response.data.tasks) {
+            return response.data.tasks; // Return the tasks
+        }
+        return [];
+    } catch (error) {
+        console.error('Error fetching tasks:', error);
+        throw error; // Propagate the error for handling at the caller level
+    }
+};

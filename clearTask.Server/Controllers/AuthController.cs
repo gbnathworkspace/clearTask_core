@@ -102,6 +102,28 @@ namespace clearTask.Server.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
+
+            #region DEMO USER
+            if (model.Email?.ToLower() == "demo@example.com" && model.Password == "demo123")
+            {
+                var demoUser = new AppUserModel
+                {
+                    Id = "demo-user",
+                    UserName = "DemoUser",
+                    Email = "demo@example.com",
+                    FirstName = "Demo",
+                    LastName = "User"
+                };
+                var dmtoken = GenerateJwtToken(demoUser);
+
+                Logger.ErrorLog($"Demo token: {dmtoken}");
+
+
+                return Ok(new { token = dmtoken, userid = demoUser.Id });
+            }
+            #endregion DEMO USER
+
+
             #region Validation
             var user = await _userManager.FindByEmailAsync(model.Email);
 

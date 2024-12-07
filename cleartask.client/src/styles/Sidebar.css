@@ -29,7 +29,46 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+    max-height: 33vh;
+    overflow-y: auto; /* Ensures scrollbar is only vertical */
+    scrollbar-gutter: stable; /* Reserve space for scrollbar */
+
+    box-sizing: border-box; /* ensures padding is included in the element's total width */
 }
+
+
+    /* Default hidden scrollbar but space preserved */
+    .list-items::-webkit-scrollbar {
+        width: 8px; /* Ensure the width matches expected scrollbar width */
+        background: transparent; /* Keep the background transparent */
+    }
+
+    /* Hide scrollbar effectively */
+    .list-items::-webkit-scrollbar-thumb {
+        background-color: transparent; /* Hidden scrollbar thumb */
+    }
+
+    .list-items::-webkit-scrollbar-track {
+        background: transparent; /* Hidden scrollbar track */
+    }
+
+    /* Show scrollbar on hover with specific styles */
+    .list-items:hover::-webkit-scrollbar-thumb {
+        background-color: #3498db; /* Visible scrollbar thumb on hover */
+        border-radius: 10px;
+        border: 3px solid #f0f0f0;
+    }
+
+    .list-items:hover::-webkit-scrollbar-track {
+        background: #f0f0f0;
+        border-radius: 10px;
+    }
+
+    .list-items::-webkit-scrollbar-thumb:hover {
+        background-color: #3498db; /* Ensure scrollbar thumb is visible on hover over the thumb itself */
+    }
+
+
 
     .list-items li {
         padding: 12px;
@@ -41,6 +80,7 @@
         transition: all 0.3s ease;
         border: 1px solid transparent;
     }
+
 
         /* Hover Effect */
         .list-items li:hover {
