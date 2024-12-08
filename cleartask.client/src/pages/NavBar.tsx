@@ -34,6 +34,8 @@ const Navbar: React.FC = () => {
                     <div className="nav-item" onClick={() => navigate('/home')}>Home</div>
                     <div className="nav-item" onClick={() => navigate('/tasks')}>Tasks</div>
                     <div className="nav-item" onClick={() => navigate('/timeview')}>TimeView</div>
+                    <div className="nav-item" onClick={() => navigate('/kanban')}>KanbanView</div>
+
                 </div>
 
                 {/* Search Bar */}

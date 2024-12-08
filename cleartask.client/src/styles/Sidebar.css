@@ -88,6 +88,32 @@
             border-color: #ddd;
         }
 
+
+    .list-items li {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+.delete-icon {
+    color: #666;
+    cursor: pointer;
+    visibility: hidden;
+    margin-left: 8px;
+}
+
+.list-items li:hover .delete-icon {
+    visibility: visible;
+}
+
+.delete-icon:hover {
+    color: #dc3545;
+}
+
+.list-name {
+    flex-grow: 1;
+}
+
 /* Active List Item */
 .active-list {
     background-color: #007bff;

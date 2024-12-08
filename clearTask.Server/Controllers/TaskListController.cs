@@ -129,5 +129,96 @@ namespace clearTask.Server.Controllers
                 return StatusCode(500, new { message = ex.Message });
             }
         }
+
+        [Authorize]
+        [HttpDelete("deletelist")]
+        public async Task<IActionResult> DeleteList(string listId)
+        {
+            try
+            {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrEmpty(userId))
+                {
+                    return Unauthorized(new { message = "User not authenticated" });
+                }
+
+                #region DEMO USER
+                // Handle demo user list deletion
+                if (userId == DEMO_USER_ID)
+                {
+                    if (_demoLists.TryGetValue(DEMO_USER_ID, out var demoUserLists))
+                    {
+                        // Find the list to delete
+                        var listToDelete = demoUserLists.FirstOrDefault(l => l.ListId == listId);
+                        if (listToDelete == null)
+                        {
+                            return NotFound(new { message = "List not found" });
+                        }
+
+                        // Prevent deletion of default demo lists
+                        if (listId == "demo-list-1" || listId == "demo-list-2")
+                        {
+                            return BadRequest(new { message = "Cannot delete default demo lists" });
+                        }
+
+                        // Remove the list
+                        demoUserLists.Remove(listToDelete);
+
+                        return Ok(new
+                        {
+                            message = "Demo list deleted successfully",
+                            deletedTaskCount = 0 // Demo tasks are not persisted
+                        });
+                    }
+                    return NotFound(new { message = "Demo lists not found" });
+                }
+                #endregion
+
+                // Regular user list deletion
+                var list = await _context.TaskListModels
+                    .FirstOrDefaultAsync(l => l.ListId == listId && l.UserId == userId);
+
+                if (list == null)
+                {
+                    return NotFound(new { message = "List not found or unauthorized access" });
+                }
+
+                // Prevent deletion of default list
+                if (list.ListId == userId)
+                {
+                    return BadRequest(new { message = "Cannot delete default list" });
+                }
+
+                // Delete all tasks associated with this list first
+                var tasksToDelete = await _context.Tasks
+                    .Where(t => t.ListId == listId && t.UserId == userId)
+                    .ToListAsync();
+
+                if (tasksToDelete.Any())
+                {
+                    _context.Tasks.RemoveRange(tasksToDelete);
+                }
+
+                // Delete the list
+                _context.TaskListModels.Remove(list);
+
+                // Save changes
+                await _context.SaveChangesAsync();
+
+                return Ok(new
+                {
+                    message = "List and associated tasks deleted successfully",
+                    deletedTaskCount = tasksToDelete.Count
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    message = "An error occurred while deleting the list",
+                    error = ex.Message
+                });
+            }
+        }
     }
 }    

@@ -34,9 +34,6 @@ interface GetListResponse {
     lists: TaskList[];
 }
 
-const token = sessionStorage.getItem('token'); // Retrieve token each time
-
-
 // Set the base URL for your API
 const API_BASE_URL = 'http://localhost:5076/api/task';
 const API_BASE_URL_ = 'http://localhost:5076/api';// Adjust the port if necessary
@@ -75,7 +72,7 @@ export const createList = async (list: TaskList) => {
 
 
 // Function to get all tasks for a specific user
-export const getAllTasks = async (userId: string, listId: string): Promise<{ data: GetTasksResponse }> => {
+export const getTasks = async (userId: string, listId: string): Promise<{ data: GetTasksResponse }> => {
     const token = sessionStorage.getItem('token'); // Retrieve token each time
 
     if (!token) {
@@ -84,13 +81,32 @@ export const getAllTasks = async (userId: string, listId: string): Promise<{ dat
     }
 
     return await axios.post(
-        `${API_BASE_URL}/getalltasks`,
+        `${API_BASE_URL}/gettasks`,
         { userId, listId }, // Body of the request
         {
             headers: {
                 Authorization: `Bearer ${token}`,
                 'Content-Type': 'application/json', // Ensure JSON content type
             },
+        }
+    );
+};
+
+export const getallTasks = async (userId: string): Promise<{ data: GetTasksResponse }> => {
+    const token = sessionStorage.getItem('token'); // Retrieve token each time
+
+    if (!token) {
+        console.error('No token found in session storage');
+        throw new Error('Unauthorized');
+    }
+
+    return await axios.get(
+        `${API_BASE_URL}/getalltasks`,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+            params: { userId },
         }
     );
 };
@@ -156,7 +172,7 @@ export const fetchTasks = async (
     listId: string
 ): Promise<any[]> => {
     try {
-        const response = await getAllTasks(userId, listId);
+        const response = await getTasks(userId, listId);
         if (response && response.data && response.data.tasks) {
             return response.data.tasks; // Return the tasks
         }

@@ -6,6 +6,7 @@ import Login from './pages/Login';
 import LandingPage from './pages/LandingPage';
 import TasksPage from './pages/Tasks';
 import TimeView from './pages/TimeView';
+import Kanban from './pages/Kanban';
 
 const App: React.FC = () => {
     return (
@@ -17,6 +18,7 @@ const App: React.FC = () => {
                 <Route path="/" element={<LandingPage />}></Route>
                 <Route path='/tasks' element={<TasksPage />}></Route>
                 <Route path="/timeview" element={<TimeView />} />
+                <Route path="/kanban" element={<Kanban/>}/>
             </Routes>
         </Router>
     );

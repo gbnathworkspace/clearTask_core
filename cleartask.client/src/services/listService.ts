@@ -1,12 +1,12 @@
 import { TaskList } from '../services/taskService';
 import { getAllLists } from '../services/taskService';
+import axios from 'axios';
 
-//type List = {
-//    id: string;
-//    name: string;
-//};
 
-// Function to fetch all lists and update the state
+
+const API_BASE_URL_ = 'http://localhost:5076/api';// Adjust the port if necessary
+
+
 export const fetchAllList = async (
     userId: string,
 ): Promise<void> => {
@@ -56,4 +56,19 @@ export const addNewList = async (
         console.error('Failed to add new list:', e);
         setLists(lists); // Rollback state in case of error
     }
+};
+
+export const deleteList = async (listId: string) => {
+    const token = sessionStorage.getItem('token');
+    if (!token) {
+        console.error('No token found in session storage');
+        throw new Error('Unauthorized');
+    }
+
+    return await axios.delete(`${ API_BASE_URL_ }/list/deletelist`, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        },
+        params: { listId },
+    });
 };

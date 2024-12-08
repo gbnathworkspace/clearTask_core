@@ -249,17 +249,16 @@ namespace clearTask.Server.Controllers
         }
 
         [Authorize]
-        [HttpPost("getalltasks")]
-        public async Task<IActionResult> GetAllTasks([FromBody] getTaskDto getTaskDto)
+        [HttpPost("gettasks")]
+        public async Task<IActionResult> GetTasks([FromBody] getTaskDto getTaskDto)
         {
             try
             {
 
-                if (string.IsNullOrWhiteSpace(getTaskDto.userId) || string.IsNullOrWhiteSpace(getTaskDto.listId))
+                if (string.IsNullOrWhiteSpace(getTaskDto.userId))
                 {
-                    return BadRequest("Id and ListId are required.");
+                    return BadRequest("Id are required.");
                 }
-
 
                 #region DEMO USER
                 // Return demo tasks for demo user
@@ -289,6 +288,68 @@ namespace clearTask.Server.Controllers
 
                 var tasks = await _context.Tasks
                     .Where(t => t.UserId == getTaskDto.userId && t.ListId == getTaskDto.listId)
+                    .Select(t => new TaskDTO
+                    {
+                        Id = t.Id,
+                        Title = t.Title ?? string.Empty, // Handle null by defaulting to an empty string
+                        Description = t.Description ?? string.Empty, // Handle null by defaulting to an empty string
+                        IsCompleted = t.IsCompleted, // Boolean cannot be null
+                        UserId = t.UserId ?? string.Empty, // Handle null by defaulting to an empty string
+                        DueDate = t.DueDate != null ? DateTime.SpecifyKind(t.DueDate, DateTimeKind.Utc) : (DateTime?)null, // Handle null for DueDate
+                        Priority = t.Priority != null ? (Priority)t.Priority : Priority.Def, // Handle null by defaulting to Priority.Default
+                        ListId = t.ListId ?? string.Empty, // Handle null by defaulting to an empty string
+                    })
+                    .ToListAsync();
+
+
+
+                return Ok(new { tasks = tasks });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Internal server error", error = ex.Message });
+            }
+        }
+
+        [Authorize]
+        [HttpGet("getalltasks")]
+        public async Task<IActionResult> GetAllTasks([FromQuery]string userId)
+        {
+            try
+            {
+
+                if (string.IsNullOrWhiteSpace(userId))
+                {
+                    return BadRequest("Id are required.");
+                }
+
+                #region DEMO USER
+                // Return demo tasks for demo user
+                if (userId == DEMO_USER_ID)
+                {
+                    if (_demoTasks.TryGetValue(DEMO_USER_ID, out var demoUserTasks))
+                    {
+                        var filteredTasks = demoUserTasks
+                            .Select(t => new TaskDTO
+                            {
+                                Id = t.Id,
+                                Title = t.Title,
+                                Description = t.Description,
+                                IsCompleted = t.IsCompleted,
+                                UserId = t.UserId,
+                                DueDate = t.DueDate,
+                                Priority = (Priority)t.Priority,
+                                ListId = t.ListId
+                            })
+                            .ToList();
+
+                        return Ok(new { tasks = filteredTasks });
+                    }
+                }
+                #endregion
+
+                var tasks = await _context.Tasks
+                    .Where(t => t.UserId == userId)
                     .Select(t => new TaskDTO
                     {
                         Id = t.Id,

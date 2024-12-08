@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import '../styles/TimeView.css';
 import Navbar from './NavBar';
-import { Task, getAllTasks } from '../services/taskService';
+import { Task, getallTasks } from '../services/taskService';
 
 const TimeView: React.FC = () => {
     const [tasks, setTasks] = useState<Task[]>([]);
     const [selectedDate, setSelectedDate] = useState<Date>(new Date());
     const [selectedView, setSelectedView] = useState<'day' | 'month' | 'year'>('day');
     const userId = sessionStorage.getItem("userid") || "";
-    const listId = userId;
+    const listId = "";
 
     useEffect(() => {
         const fetchTasks = async () => {
             try {
-                const response = await getAllTasks(userId, listId);
+                const response = await getallTasks(userId);
                 const tasksWithDates = response.data.tasks
                     .filter(task => task.dueDate != null)
                     .map(task => ({
@@ -132,26 +132,28 @@ const TimeView: React.FC = () => {
             <Navbar />
             <div className="timeview-content">
                 <div className="timeline-container">
-                    <div className="view-selector">
-                        <button
-                            className={selectedView === 'day' ? 'active' : ''}
-                            onClick={() => handleViewChange('day')}
-                        >
-                            Day
-                        </button>
-                        <button
-                            className={selectedView === 'month' ? 'active' : ''}
-                            onClick={() => handleViewChange('month')}
-                        >
-                            Month
-                        </button>
-                        <button
-                            className={selectedView === 'year' ? 'active' : ''}
-                            onClick={() => handleViewChange('year')}
-                        >
-                            Year
-                        </button>
-                        <div className="selectors">
+                    <div className="timeline-header">
+                        <div className="view-buttons">
+                            <button
+                                className={selectedView === 'day' ? 'active' : ''}
+                                onClick={() => handleViewChange('day')}
+                            >
+                                Day
+                            </button>
+                            <button
+                                className={selectedView === 'month' ? 'active' : ''}
+                                onClick={() => handleViewChange('month')}
+                            >
+                                Month
+                            </button>
+                            <button
+                                className={selectedView === 'year' ? 'active' : ''}
+                                onClick={() => handleViewChange('year')}
+                            >
+                                Year
+                            </button>
+                        </div>
+                        <div className="view-selectors">
                             {selectedView === 'day' && (
                                 <input
                                     type="date"
@@ -178,8 +180,8 @@ const TimeView: React.FC = () => {
                                         value={selectedDate.getFullYear()}
                                         onChange={(e) => setSelectedDate(new Date(parseInt(e.target.value), selectedDate.getMonth(), selectedDate.getDate()))}
                                     >
-                                        {Array.from({ length: 10 }, (_, i) => {
-                                            const year = new Date().getFullYear() - i;
+                                        {Array.from({ length: (2035 - new Date().getFullYear() + 1) }, (_, i) => {
+                                            const year = new Date().getFullYear() + i;  // Changed from subtract to add
                                             return (
                                                 <option key={year} value={year}>
                                                     {year}
@@ -194,8 +196,8 @@ const TimeView: React.FC = () => {
                                     value={selectedDate.getFullYear()}
                                     onChange={(e) => setSelectedDate(new Date(parseInt(e.target.value), 0, 1))}
                                 >
-                                    {Array.from({ length: 10 }, (_, i) => {
-                                        const year = new Date().getFullYear() - i;
+                                    {Array.from({ length: (2035 - new Date().getFullYear() + 1) }, (_, i) => {
+                                        const year = new Date().getFullYear() + i;  // Changed from subtract to add
                                         return (
                                             <option key={year} value={year}>
                                                 {year}
@@ -205,43 +207,43 @@ const TimeView: React.FC = () => {
                                 </select>
                             )}
                         </div>
-                    </div>
-                    <div className="timeline">
-                        {getFilteredTasks().map((task) => (
-                            <div
-                                key={task.id}
-                                className="timeline-task"
-                                style={{ left: `${getTaskPosition(task.dueDate)}%` }}
-                            >
-                                <div className="task-bubble">
-                                    {task.title}
-                                    <div className="task-time">
-                                        {formatTaskTime(task.dueDate)}
+                        <div className="timeline">
+                            {getFilteredTasks().map((task) => (
+                                <div
+                                    key={task.id}
+                                    className="timeline-task"
+                                    style={{ left: `${getTaskPosition(task.dueDate)}%` }}
+                                >
+                                    <div className="task-bubble">
+                                        {task.title}
+                                        <div className="task-time">
+                                            {formatTaskTime(task.dueDate)}
+                                        </div>
+                                    </div>
+                                    <div className="task-line"></div>
+                                </div>
+                            ))}
+                        </div>
+                        <div className="timeline-scale">
+                            {selectedView === 'day' && Array.from({ length: 24 }, (_, i) => (
+                                <div key={i} className="timeline-tick">
+                                    <div className="timeline-label">{`${i}:00`}</div>
+                                </div>
+                            ))}
+                            {selectedView === 'month' && Array.from({ length: getDaysInMonth() }, (_, i) => (
+                                <div key={i} className="timeline-tick">
+                                    <div className="timeline-label">{i + 1}</div>
+                                </div>
+                            ))}
+                            {selectedView === 'year' && Array.from({ length: 12 }, (_, i) => (
+                                <div key={i} className="timeline-tick">
+                                    <div className="timeline-label">
+                                        {new Date(selectedDate.getFullYear(), i).toLocaleDateString('default', { month: 'short' })}
                                     </div>
                                 </div>
-                                <div className="task-line"></div>
-                            </div>
-                        ))}
-                    </div>
-                    <div className="timeline-scale">
-                        {selectedView === 'day' && Array.from({ length: 24 }, (_, i) => (
-                            <div key={i} className="timeline-tick">
-                                <div className="timeline-label">{`${i}:00`}</div>
-                            </div>
-                        ))}
-                        {selectedView === 'month' && Array.from({ length: getDaysInMonth() }, (_, i) => (
-                            <div key={i} className="timeline-tick">
-                                <div className="timeline-label">{i + 1}</div>
-                            </div>
-                        ))}
-                        {selectedView === 'year' && Array.from({ length: 12 }, (_, i) => (
-                            <div key={i} className="timeline-tick">
-                                <div className="timeline-label">
-                                    {new Date(selectedDate.getFullYear(), i).toLocaleDateString('default', { month: 'short' })}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
+                            ))}
+                        </div>
+                    </div>]
                 </div>
             </div>
         </div>
