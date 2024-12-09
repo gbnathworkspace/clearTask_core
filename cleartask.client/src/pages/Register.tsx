@@ -37,12 +37,13 @@ const Register: React.FC = () => {
         setErrorDetails(null);
 
         // Client-side validation for matching passwords
-        if (password !== confirmPassword) {
-            setErrorMessage("Passwords do not match");
-            return;
-        }
+        //if (password !== confirmPassword) {
+        //    setErrorMessage("Passwords do not match");
+        //    return;
+        //}
 
         try {
+            setLastName('');
             const response = await register({ firstName, lastName, email, password, confirmPassword });
             setResponseMessage('User registered successfully!');
             console.log('User registered:', response.data);
@@ -81,19 +82,19 @@ const Register: React.FC = () => {
                     <input
                     className="login-input"
                     type="text"
-                    placeholder="First Name"
+                    placeholder="User Name"
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
                     required
                 />
-                    <input
-                    className="login-input"
-                    type="text"
-                    placeholder="Last Name"
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
-                    required
-                />
+                {/*    <input*/}
+                {/*    className="login-input"*/}
+                {/*    type="text"*/}
+                {/*    placeholder="Last Name"*/}
+                {/*    value={lastName}*/}
+                {/*    onChange={(e) => setLastName(e.target.value)}*/}
+                {/*    required*/}
+                {/*/>*/}
 
                     <input
                     className="login-input"
@@ -113,14 +114,14 @@ const Register: React.FC = () => {
                     required
                 />
 
-                    <input
-                    className="login-input"
-                    type="password"
-                    placeholder="Confirm Password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    required
-                />
+                {/*    <input*/}
+                {/*    className="login-input"*/}
+                {/*    type="password"*/}
+                {/*    placeholder="Confirm Password"*/}
+                {/*    value={confirmPassword}*/}
+                {/*    onChange={(e) => setConfirmPassword(e.target.value)}*/}
+                {/*    required*/}
+                {/*/>*/}
 
 
                     <button className="login-button" type="submit" >Register</button>

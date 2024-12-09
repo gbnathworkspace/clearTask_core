@@ -1,6 +1,7 @@
 import axios from 'axios';
+import CONFIG from '../config';
 
-const API_URL = 'http://localhost:5076/api/auth/'; // Your backend API base URL
+const API_URL = `${CONFIG.API_BASE_URL}/api/auth/`;
 
 /**
  * Register a new user.

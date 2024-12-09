@@ -5,8 +5,7 @@ public class RegisterModel
     [Required]
     public required string FirstName { get; set; }
 
-    [Required]
-    public required string LastName { get; set; }
+    public required string LastName { get; set; } = string.Empty;
 
     [Required]
     [EmailAddress]

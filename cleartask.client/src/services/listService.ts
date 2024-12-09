@@ -1,10 +1,10 @@
 import { TaskList } from '../services/taskService';
 import { getAllLists } from '../services/taskService';
 import axios from 'axios';
+import CONFIG from '../config';
 
 
-
-const API_BASE_URL_ = 'http://localhost:5076/api';// Adjust the port if necessary
+const API_BASE_URL_ = `${CONFIG.API_BASE_URL}/api`;
 
 
 export const fetchAllList = async (

@@ -1,6 +1,9 @@
 import axios from 'axios';
+import CONFIG from '../config';
 
 
+const API_BASE_URL = `${ CONFIG.API_BASE_URL }api/task`;
+const API_BASE_URL_ = `${ CONFIG.API_BASE_URL }/api`;
 export enum Priority {
     def = 0,
     low = 1,
@@ -35,8 +38,7 @@ interface GetListResponse {
 }
 
 // Set the base URL for your API
-const API_BASE_URL = 'http://localhost:5076/api/task';
-const API_BASE_URL_ = 'http://localhost:5076/api';// Adjust the port if necessary
+
 
 export const getAllLists = async (userId: string): Promise<{ data: GetListResponse }> => {
     const token = sessionStorage.getItem('token'); // Retrieve token each time
