@@ -15,6 +15,12 @@ namespace clearTask.Server.Controllers
     {
         private readonly UserManager<AppUserModel> _userManager = userManager;
 
+        [HttpGet]
+        public IActionResult Get()
+        {
+            return Ok("Test connection successful!");
+        }
+
         [HttpPost("edit")]
         public async Task<IActionResult> UpdateProfile([FromBody] AppUserModel model)
         {
