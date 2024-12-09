@@ -1,10 +1,17 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import { createHtmlPlugin } from 'vite-plugin-html';
 
 export default defineConfig({
-    plugins: [react()],
+    plugins: [
+        react(),
+        createHtmlPlugin({
+            template: './public/index.html',
+            entry: './src/main.tsx',
+        }),
+    ],
     build: {
-        outDir: 'dist', // Specify the output directory
+        outDir: 'dist',
     },
     server: {
         port: 5173,
