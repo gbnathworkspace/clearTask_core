@@ -1,11 +1,11 @@
-// src/config.ts
-
 interface Config {
     API_BASE_URL: string;
+    ENV: string;
 }
 
 const CONFIG: Config = {
-    API_BASE_URL: process.env.REACT_APP_API_URL || 'http://localhost:5076'
+    API_BASE_URL: import.meta.env.VITE_API_URL || 'http://localhost:5076/',
+    ENV: import.meta.env.VITE_ENV || 'development'
 };
 
 export default CONFIG;

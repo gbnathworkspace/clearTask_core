@@ -11,7 +11,7 @@ export enum Priority {
     high = 3
 }
 export interface Task {
-    id: number;
+    id?: number;
     title: string;
     description: string;
     isCompleted: boolean;
@@ -115,6 +115,7 @@ export const getallTasks = async (userId: string): Promise<{ data: GetTasksRespo
 
 // Function to create a new task
 export const createTask = async (task: Task) => {
+    console.log(API_BASE_URL);
     const token = sessionStorage.getItem('token');
     if (!token) {
         console.error('No token found in session storage');

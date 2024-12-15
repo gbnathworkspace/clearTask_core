@@ -1,5 +1,281 @@
+/* Home Page Container */
 .home-page {
     height: 100vh;
     width: 100vw;
     background-color: #ffffff;
+    overflow: hidden;
+}
+
+.home-main {
+    display: flex;
+    flex-direction: column;
+    margin-top: 80px;
+    height: calc(100vh - 80px);
+    width: 100%;
+
+    background-color: #ffffff;
+}
+
+.home-content {
+    flex: 1;
+    padding: 20px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+
+/* Timeline Container */
+.home-container {
+    position: relative;
+    width: 90%;
+    min-height: 400px;
+    background-color: #F7F7F5;
+    border-radius: 10px;
+    margin: 40px auto;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    overflow-y: scroll; /* Always reserve scrollbar space */
+    scrollbar-gutter: stable; /* Reserve space for scrollbar */
+}
+
+    .home-container::-webkit-scrollbar {
+        width: 8px; /* Ensure the width matches expected scrollbar width */
+        background: transparent; /* Keep the background transparent */
+    }
+
+/* Hide scrollbar effectively */
+    .home-container::-webkit-scrollbar-thumb {
+        background-color: transparent; /* Hidden scrollbar thumb */
+    }
+
+    .home-container::-webkit-scrollbar-track {
+        background: transparent; /* Hidden scrollbar track */
+    }
+
+/* Show scrollbar on hover with specific styles */
+    .home-container:hover::-webkit-scrollbar-thumb {
+        background-color: #3498db; /* Visible scrollbar thumb on hover */
+        border-radius: 10px;
+        border: 3px solid #f0f0f0;
+    }
+
+    .home-container:hover::-webkit-scrollbar-track {
+        background: #f0f0f0;
+        border-radius: 10px;
+    }
+
+    .home-container::-webkit-scrollbar-thumb:hover {
+        background-color: #3498db; /* Ensure scrollbar thumb is visible on hover over the thumb itself */
+    }
+
+/* Welcome Section */
+.welcome-section {
+    background-color: #ffffff;
+    padding: 24px;
+    border-radius: 10px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+    .welcome-section h1 {
+        font-size: 32px;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 8px;
+    }
+
+    .welcome-section p {
+        color: #666;
+        font-size: 16px;
+    }
+
+/* Stats Grid */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 24px;
+    margin-bottom: 32px;
+}
+
+.stat-card {
+    background-color: white;
+    padding: 24px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+}
+
+.stat-icon-container {
+    padding: 12px;
+    border-radius: 50%;
+    margin-right: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+    .stat-icon-container svg {
+        width: 24px;
+        height: 24px;
+    }
+
+    .stat-icon-container.completed {
+        background-color: #dcfce7;
+        color: #16a34a;
+    }
+
+    .stat-icon-container.in-progress {
+        background-color: #dbeafe;
+        color: #2563eb;
+    }
+
+    .stat-icon-container.upcoming {
+        background-color: #fef9c3;
+        color: #ca8a04;
+    }
+
+    .stat-icon-container.streak {
+        background-color: #f3e8ff;
+        color: #9333ea;
+    }
+
+.stat-info h3 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 4px;
+}
+
+.stat-info p {
+    color: #666;
+    font-size: 14px;
+}
+
+/* Quick Actions */
+.quick-actions {
+    margin-bottom: 32px;
+}
+
+    .quick-actions h2 {
+        font-size: 20px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 16px;
+    }
+
+.actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+}
+
+.action-button {
+    background-color: white;
+    padding: 16px;
+    border-radius: 8px;
+    border: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+    .action-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .action-button svg {
+        width: 20px;
+        height: 20px;
+        margin-right: 8px;
+        color: #2563eb;
+    }
+
+    .action-button span {
+        color: #333;
+        font-weight: 500;
+    }
+
+/* Recent Activity */
+.recent-activity {
+    background-color: white;
+    padding: 24px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+    .recent-activity h2 {
+        font-size: 20px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 16px;
+    }
+
+.activity-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.activity-item {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    border-bottom: 1px solid #eee;
+}
+
+    .activity-item:last-child {
+        border-bottom: none;
+    }
+
+.activity-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 16px;
+}
+
+    .activity-icon.completed {
+        color: #16a34a;
+    }
+
+    .activity-icon.deadline {
+        color: #2563eb;
+    }
+
+    .activity-icon.achievement {
+        color: #ca8a04;
+    }
+
+.activity-details {
+    flex: 1;
+}
+
+.activity-text {
+    color: #333;
+    margin-bottom: 4px;
+}
+
+.activity-time {
+    color: #666;
+    font-size: 14px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .home-content {
+        padding: 20px;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .actions-grid {
+        grid-template-columns: 1fr;
+    }
 }

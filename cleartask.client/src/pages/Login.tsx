@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import logo from '../assets/logo.png'; // Import your logo image
 import '../styles/Login.css';
 
+
 interface LoginResponse {
     token: string;
     userid: string;
@@ -22,10 +23,16 @@ const Login: React.FC = () => {
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
     const navigate = useNavigate();
 
+
+    const handleLogoClick = () => {
+        window.location.href = '/';
+    };
+
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         setErrorMessage(null);
         setSuccessMessage(null);
+
         try {
             const response = await login(email, password);
             const responseData = response.data as LoginResponse;
@@ -44,7 +51,7 @@ const Login: React.FC = () => {
 
     return (
         <div className="login-container">
-            <img src={logo} alt="Clear Task Logo" className="logo" />
+            <img src={logo} alt="Clear Task Logo" className="logo" onClick={handleLogoClick} />
             <div className="login-box">
                 <h1 className="login-title">Log in</h1>
                 <form onSubmit={handleLogin} className="login-form">

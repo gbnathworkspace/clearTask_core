@@ -4,9 +4,11 @@ import Home from './pages/Home'
 import Register from './pages/Register';
 import Login from './pages/Login';
 import LandingPage from './pages/LandingPage';
+import LoadingPage from './pages/LoadingPage';
 import TasksPage from './pages/Tasks';
 import TimeView from './pages/TimeView';
 import Kanban from './pages/Kanban';
+import './styles/theme.css';
 
 const App: React.FC = () => {
     return (
@@ -19,6 +21,8 @@ const App: React.FC = () => {
                 <Route path='/tasks' element={<TasksPage />}></Route>
                 <Route path="/timeview" element={<TimeView />} />
                 <Route path="/kanban" element={<Kanban/>}/>
+                <Route path="/loading" element={<LoadingPage />} />
+
             </Routes>
         </Router>
     );

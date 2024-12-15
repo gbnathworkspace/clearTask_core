@@ -1,4 +1,4 @@
-/* Page Container */
+/* Container Styles */
 .kanban-view-page {
     height: 100vh;
     width: 100vw;
@@ -15,7 +15,7 @@
     background-color: #ffffff;
 }
 
-/* Kanban Board Container */
+/* Board Layout */
 .kanban-container {
     position: relative;
     width: 80%;
@@ -28,27 +28,21 @@
     display: flex;
     gap: 20px;
     overflow-x: auto;
+    scrollbar-gutter: stable;
 }
 
-/* Kanban Column */
+/* Column Styles */
 .kanban-column {
     flex: 1;
-    min-width: 300px;
+    min-width: 250px;
     background-color: #ffffff;
-    border-radius: 8px;
-    padding: 16px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .column-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-bottom: 12px;
-    border-bottom: 2px solid #F7F7F5;
+    padding: 16px;
+    border-radius: 12px 12px 0 0;
 }
 
 .column-title {
@@ -58,14 +52,15 @@
 }
 
 .task-count {
-    background-color: #787878;
-    color: white;
-    padding: 2px 8px;
-    border-radius: 12px;
-    font-size: 0.85rem;
+    background-color: #ffffff;
+    color: #333;
+    padding: 4px 12px;
+    border-radius: 16px;
+    font-size: 0.9rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-/* Kanban Card */
+/* Card Styles */
 .kanban-card {
     background-color: #ffffff;
     border: 1px solid #eee;
@@ -102,7 +97,48 @@
     color: #999;
 }
 
-/* Add Task Button */
+/* Priority Indicators */
+.priority-indicator {
+    width: 40px;
+    height: 4px;
+    border-radius: 2px;
+    margin-bottom: 8px;
+}
+
+.priority-high {
+    background-color: #dc3545;
+}
+
+.priority-medium {
+    background-color: #ffc107;
+}
+
+.priority-low {
+    background-color: #28a745;
+}
+
+.priority-overdue {
+    background-color: #ff4d4d;
+}
+
+/* Column Header Colors */
+.kanban-column:nth-child(1) .column-header {
+    background-color: #ffebee;
+}
+
+.kanban-column:nth-child(2) .column-header {
+    background-color: #e8f5e9;
+}
+
+.kanban-column:nth-child(3) .column-header {
+    background-color: #e3f2fd;
+}
+
+.kanban-column:nth-child(4) .column-header {
+    background-color: #f5f5f5;
+}
+
+/* Buttons and Actions */
 .add-task-button {
     padding: 8px 16px;
     background-color: #007bff;
@@ -118,6 +154,36 @@
     .add-task-button:hover {
         background-color: #0056b3;
     }
+
+.column-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.column-action-button {
+    background: none;
+    border: none;
+    color: #787878;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+    .column-action-button:hover {
+        background-color: #f0f0f0;
+    }
+
+/* Drag and Drop States */
+.dragging {
+    opacity: 0.5;
+    cursor: grabbing;
+}
+
+.drag-over {
+    background-color: #f8f9fa;
+    border: 2px dashed #007bff;
+}
 
 /* Scrollbar Styling */
 .kanban-container::-webkit-scrollbar {
@@ -143,54 +209,3 @@
     background: #f0f0f0;
     border-radius: 10px;
 }
-
-/* Drag and Drop Styles */
-.dragging {
-    opacity: 0.5;
-    cursor: grabbing;
-}
-
-.drag-over {
-    background-color: #f8f9fa;
-    border: 2px dashed #007bff;
-}
-
-/* Priority Indicators */
-.priority-indicator {
-    width: 40px;
-    height: 4px;
-    border-radius: 2px;
-    margin-bottom: 8px;
-}
-
-.priority-high {
-    background-color: #dc3545;
-}
-
-.priority-medium {
-    background-color: #ffc107;
-}
-
-.priority-low {
-    background-color: #28a745;
-}
-
-/* Column Actions */
-.column-actions {
-    display: flex;
-    gap: 8px;
-}
-
-.column-action-button {
-    background: none;
-    border: none;
-    color: #787878;
-    cursor: pointer;
-    padding: 4px;
-    border-radius: 4px;
-    transition: background-color 0.2s;
-}
-
-    .column-action-button:hover {
-        background-color: #f0f0f0;
-    }

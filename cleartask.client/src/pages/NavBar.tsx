@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import profilepic from '../assets/defaultuser.jpg';
 import logo from '../assets/logo.png';
 import '../styles/Navbar.css';
+import ThemeToggle from './ThemeToggle';
+
 
 const Navbar: React.FC = () => {
     const navigate = useNavigate();
@@ -51,6 +53,8 @@ const Navbar: React.FC = () => {
 
                 {/* Profile Section */}
                 <div className="navbar-profile" onClick={handleProfileClick}>
+                    <ThemeToggle />
+
                     <img src={profilepic} alt="Profile" />
                     {showDropdown && (
                         <div className="profile-dropdown">

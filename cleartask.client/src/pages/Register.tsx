@@ -1,8 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react';
-import { register } from '../services/authService';
+import { register, login } from '../services/authService';
 import { useNavigate } from 'react-router-dom';
 import logo from '../assets/logo.png'; // Import your logo image
+
+
+interface LoginResponse {
+    token: string;
+    userid: string;
+}
 
 
 
@@ -24,11 +30,16 @@ const Register: React.FC = () => {
     const [responseMessage, setResponseMessage] = useState<string | null>(null);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [errorDetails, setErrorDetails] = useState<string[] | null>(null);
+
     const navigate = useNavigate();
 
     const NavigateToLogin = () => {
         navigate('/Login')
     }
+
+    const handleLogoClick = () => {
+        window.location.href = '/';
+    };
 
     const handleRegister = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -43,11 +54,18 @@ const Register: React.FC = () => {
         //}
 
         try {
+            navigate('/loading');
+
             setLastName('');
             const response = await register({ firstName, lastName, email, password, confirmPassword });
             setResponseMessage('User registered successfully!');
             console.log('User registered:', response.data);
-            navigate('/home');
+            const loginresponse = await login(email, password);
+            const responseData = loginresponse.data as LoginResponse;
+            console.log('User logged in:');
+            sessionStorage.setItem('token', responseData.token);
+            sessionStorage.setItem('userid', responseData.userid);
+            setTimeout(() => navigate('/home'), 1500);
         } catch (error) {
             if (isErrorResponse(error)) {
                 const errorData: ErrorResponse = error.response.data;
@@ -62,6 +80,9 @@ const Register: React.FC = () => {
                 setErrorMessage('An unexpected error occurred');
                 console.error('An unexpected error occurred:', error);
             }
+            setTimeout(() => {
+                navigate('/register');
+            }, 1500);
         }
     };
 
@@ -75,44 +96,46 @@ const Register: React.FC = () => {
 
     return (
         <div className="login-container">
-            <img src={logo} alt="Clear Task Logo" className="logo" />
+            <img src={logo} alt="Clear Task Logo" className="logo" onClick={handleLogoClick} />
             <div className="login-box">
                 <h1 className="login-title">Register</h1>
                 <form onSubmit={handleRegister} className="login-form">
                     <input
-                    className="login-input"
-                    type="text"
-                    placeholder="User Name"
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
-                    required
-                />
-                {/*    <input*/}
-                {/*    className="login-input"*/}
-                {/*    type="text"*/}
-                {/*    placeholder="Last Name"*/}
-                {/*    value={lastName}*/}
-                {/*    onChange={(e) => setLastName(e.target.value)}*/}
-                {/*    required*/}
-                {/*/>*/}
-
+                        className="login-input"
+                        type="text"
+                        placeholder="User Name"
+                        value={firstName}
+                        onChange={(e) => setFirstName(e.target.value)}
+                        autoComplete="off"
+                        required
+                    />
                     <input
-                    className="login-input"
-                    type="email"
-                    placeholder="Email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                />
-
+                        className="login-input"
+                        type="text"
+                        placeholder="Last Name"
+                        value={lastName}
+                        onChange={(e) => setLastName(e.target.value)}
+                        autoComplete="off"
+                        required
+                    />
                     <input
-                    className="login-input"
-                    type="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                />
+                        className="login-input"
+                        type="email"
+                        placeholder="Email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        autoComplete="off"
+                        required
+                    />
+                    <input
+                        className="login-input"
+                        type="password"
+                        placeholder="Password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        autoComplete="off"
+                        required
+                    />
 
                 {/*    <input*/}
                 {/*    className="login-input"*/}
@@ -142,7 +165,7 @@ const Register: React.FC = () => {
                     </a>
                 </div>
             </div>
-        </div>
+            </div>
     );
 
 };

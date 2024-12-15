@@ -184,7 +184,7 @@ const Tasks: React.FC = () => {
 
                     {/* Main content */}
                     <button
-                        className="add-task-trigger"
+                        className="add-task-button"
                         onClick={() => setIsAddTaskOpen(true)}
                     >
                         Add Task

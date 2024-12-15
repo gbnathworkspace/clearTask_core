@@ -26,7 +26,6 @@
     overflow-y: scroll; /* Always reserve scrollbar space */
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     border-radius: 10px;
-    box-sizing: border-box;
     scrollbar-gutter: stable; /* Reserve space for scrollbar */
 }
 
@@ -100,7 +99,7 @@
     gap: 15px;
     padding: 20px;
     border-radius: 8px;
-    background-color: #666666;
+    background-color: #ffffff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -197,7 +196,7 @@ input[type="text"] {
 }
 
 .calendar-icon {
-    color: #007bff;
+    color: black;
 }
 
 
@@ -212,23 +211,40 @@ input[type="text"] {
         flex: 1;
         padding: 10px;
         border-radius: 5px;
-        background-color: #666666;
+        background-color: white !important;
     }
 
+
+input[type="date"],
+input[type="time"] {
+    background-color: white !important;
+    color: #333;
+}
+
+/* Update Input Styles */
 .task-title input,
 .task-title textarea {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     font-size: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: #fff;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    margin-bottom: 16px;
 }
+
+    .task-title input:focus,
+    .task-title textarea:focus {
+        outline: none;
+        border-color: #007bff;
+        box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+    }
 
 .task-title textarea {
-    resize: none;
-    height: 100px;
+    min-height: 120px;
+    resize: vertical;
 }
-
 
 
 
@@ -254,7 +270,6 @@ input[type="text"] {
     cursor: pointer;
 }
 
-/* Modal Overlay */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -266,33 +281,46 @@ input[type="text"] {
     justify-content: center;
     align-items: center;
     z-index: 1000;
+    backdrop-filter: blur(4px);
 }
 
-/* Modal Content */
+/* Update Modal Content */
 .modal-content {
     background: #ffffff;
-    padding: 20px;
-    width: 800px;
-    height: 400px;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    padding: 24px;
+    width: 90%;
+    max-width: 800px;
+    border-radius: 12px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
     position: relative;
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 20px;
 }
 
-/* Close Button */
+/* Update Close Button */
 .close-modal {
     position: absolute;
-    top: 10px;
-    right: 15px;
-    font-size: 1.5rem;
+    top: 16px;
+    right: 16px;
+    font-size: 24px;
     background: none;
     border: none;
     cursor: pointer;
-    color: #333;
+    color: #666;
+    transition: color 0.2s;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
+
+    .close-modal:hover {
+        color: #333;
+        background-color: #f5f5f5;
+    }
 
 /* Input Containers */
 .calendar-popup label {
@@ -311,30 +339,79 @@ input[type="text"] {
     margin-bottom: 10px;
 }
 
-/* Add Task Button */
+/* Update Add Task Button */
 .add-task-button {
     background-color: #007bff;
     color: white;
-    padding: 10px 20px;
+    padding: 12px 24px;
     font-size: 1rem;
+    font-weight: 500;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    transition: background-color 0.2s, transform 0.1s;
+    align-self: flex-end;
+    margin-top: 16px;
 }
 
-.add-task-button:hover {
-    background-color: #0056b3;
-}
+    .add-task-button:hover {
+        background-color: #0056b3;
+    }
 
-/* Calendar Popup */
+    .add-task-button:active {
+        transform: translateY(1px);
+    }
+
+/ /* Update Calendar Popup */
 .calendar-popup {
-    background-color: #ffffff;
-    border: 1px solid #ccc;
-    padding: 10px;
-    border-radius: 5px;
+    border: none;
+    padding: 16px;
     display: flex;
-    gap: 10px;
-    position: absolute;
-    z-index: 1000;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.calendar-popup label {
+    font-weight: 500;
+    color: #444;
+    margin-bottom: 4px;
+}
+
+.calendar-popup input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+    .calendar-popup input:focus {
+        outline: none;
+        border-color: #007bff;
+        box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+    }
+
+.calendar-popup input,
+.task-title input,
+.task-title textarea {
+    background-color: white !important;
+    color: #333;
+    border: 1px solid #e0e0e0;
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    border-radius: 8px;
+}
+
+/* Fix icon colors in date/time inputs */
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator {
+    filter: invert(0.5); /* Makes icons visible dark gray */
+}
+
+/* Ensure text is also visible */
+input[type="date"],
+input[type="time"] {
+    color: #333;
 }

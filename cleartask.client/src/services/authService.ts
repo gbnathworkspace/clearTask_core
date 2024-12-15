@@ -1,7 +1,7 @@
 import axios from 'axios';
 import CONFIG from '../config';
 
-const API_URL = `${CONFIG.API_BASE_URL}/api/auth/`;
+const API_URL = `${CONFIG.API_BASE_URL}api/auth/`;
 
 /**
  * Register a new user.

@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using clearTask.Server.Models;
 using clearTask.Server;
+using Newtonsoft.Json.Linq;
 
 namespace clearTask.Server.Controllers
 {
@@ -91,7 +92,7 @@ namespace clearTask.Server.Controllers
                 }
                 #endregion
 
-                return Ok(new { message = "Registration successful" });
+                return Ok(new { token = token, userid = user.Id });
             }
             catch (Exception ex)
             {
