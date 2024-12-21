@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import profilepic from '../assets/defaultuser.jpg';
-import logo from '../assets/logo.png';
 import '../styles/Navbar.css';
-import ThemeToggle from './ThemeToggle';
-
+import logo from '../assets/logo.png';
 
 const Navbar: React.FC = () => {
     const navigate = useNavigate();
+    const location = useLocation();
     const [showDropdown, setShowDropdown] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
+
+    const isActive = (path: string) => {
+        return location.pathname === path;
+    };
 
     const handleProfileClick = () => {
         setShowDropdown(!showDropdown);
@@ -22,25 +25,38 @@ const Navbar: React.FC = () => {
 
     return (
         <div className="navbar-container">
-
-
             <div className="navbar">
-                {/* Logo Section */}
                 <div className="logo-section">
                     <img src={logo} alt="Clear Task Logo" className="logo-image" />
                 </div>
 
-
-                {/* Navigation Links */}
                 <div className="navbar-links">
-                    <div className="nav-item" onClick={() => navigate('/home')}>Home</div>
-                    <div className="nav-item" onClick={() => navigate('/tasks')}>Tasks</div>
-                    <div className="nav-item" onClick={() => navigate('/timeview')}>TimeView</div>
-                    <div className="nav-item" onClick={() => navigate('/kanban')}>KanbanView</div>
-
+                    <div
+                        className={`nav-item ${isActive('/home') ? 'active' : ''}`}
+                        onClick={() => navigate('/home')}
+                    >
+                        Home
+                    </div>
+                    <div
+                        className={`nav-item ${isActive('/tasks') ? 'active' : ''}`}
+                        onClick={() => navigate('/tasks')}
+                    >
+                        Tasks
+                    </div>
+                    <div
+                        className={`nav-item ${isActive('/timeview') ? 'active' : ''}`}
+                        onClick={() => navigate('/timeview')}
+                    >
+                        TimeView
+                    </div>
+                    <div
+                        className={`nav-item ${isActive('/kanban') ? 'active' : ''}`}
+                        onClick={() => navigate('/kanban')}
+                    >
+                        KanbanView
+                    </div>
                 </div>
 
-                {/* Search Bar */}
                 <form className="navbar-search" onSubmit={handleSearch}>
                     <input
                         type="text"
@@ -51,10 +67,7 @@ const Navbar: React.FC = () => {
                     />
                 </form>
 
-                {/* Profile Section */}
                 <div className="navbar-profile" onClick={handleProfileClick}>
-                    <ThemeToggle />
-
                     <img src={profilepic} alt="Profile" />
                     {showDropdown && (
                         <div className="profile-dropdown">

@@ -3,7 +3,7 @@ import CONFIG from '../config';
 
 
 const API_BASE_URL = `${ CONFIG.API_BASE_URL }api/task`;
-const API_BASE_URL_ = `${ CONFIG.API_BASE_URL }/api`;
+const API_BASE_URL_ = `${ CONFIG.API_BASE_URL }api`;
 export enum Priority {
     def = 0,
     low = 1,

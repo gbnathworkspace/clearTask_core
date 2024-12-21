@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "clearTask.Server", "clearTa
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "cleartask.client", "cleartask.client\cleartask.client.esproj", "{9E82CB26-EB00-4A3D-A934-6CE8D483330D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Migrator", "Migrator\Migrator.csproj", "{6215B0AD-2D3D-4253-82BC-EB37275CF916}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,10 +23,6 @@ Global
 		{9E82CB26-EB00-4A3D-A934-6CE8D483330D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9E82CB26-EB00-4A3D-A934-6CE8D483330D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9E82CB26-EB00-4A3D-A934-6CE8D483330D}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{6215B0AD-2D3D-4253-82BC-EB37275CF916}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6215B0AD-2D3D-4253-82BC-EB37275CF916}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6215B0AD-2D3D-4253-82BC-EB37275CF916}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6215B0AD-2D3D-4253-82BC-EB37275CF916}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

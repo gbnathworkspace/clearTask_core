@@ -11,6 +11,8 @@ public class ApplicationDbContext : IdentityDbContext<AppUserModel>
     public DbSet<AppUserModel> AppUserModels { get; set; }
     public DbSet<TaskModel> Tasks { get; set; }
     public DbSet<TaskListModel> TaskListModels { get; set; }
+    public DbSet<LogEntry> Logs { get; set; } // Add this line
+
 }
 
 

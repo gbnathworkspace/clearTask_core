@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using clearTask.Server.Models;
 using clearTask.Server;
+using System.Reflection;
 
 namespace clearTask.Server.Controllers
 {
@@ -24,7 +25,6 @@ namespace clearTask.Server.Controllers
         [HttpPost("edit")]
         public async Task<IActionResult> UpdateProfile([FromBody] AppUserModel model)
         {
-            Logger.InfoLog(model);
             try
             {
                 #region Validation
@@ -55,7 +55,7 @@ namespace clearTask.Server.Controllers
             }
             catch (Exception ex)
             {
-                Logger.ErrorLog(ex.StackTrace + ex.Message);
+                await Logger.ErrorAsync($"{MethodBase.GetCurrentMethod()?.Name} failed", ex, data: model);
                 return StatusCode(500, new { message = "Internal server error" });
             }
         }

@@ -1,3 +1,4 @@
+using clearTask.Server;
 using clearTask.Server.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -52,6 +53,9 @@ builder.Services.AddAuthentication(options =>
 });
 
 
+// In Program.cs
+
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAllOrigins",
@@ -100,8 +104,14 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+builder.Services.AddSingleton<Logger>();
+
 
 var app = builder.Build();
+
+
+// After building the app
+Logger.Initialize(app.Services.GetRequiredService<IServiceScopeFactory>());
 
 // Configure middleware
 if (app.Environment.IsDevelopment())

@@ -7,6 +7,7 @@ using System.Security.Claims;
 using clearTask.Server.Models;
 using clearTask.Server;
 using Newtonsoft.Json.Linq;
+using System.Reflection;
 
 namespace clearTask.Server.Controllers
 {
@@ -35,7 +36,6 @@ namespace clearTask.Server.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterModel model)
         {
-            Logger.InfoLog(model);
             try
             {
                 #region Validation
@@ -92,10 +92,11 @@ namespace clearTask.Server.Controllers
                 }
                 #endregion
 
-                return Ok(new { token = token, userid = user.Id });
+                return Ok(new { userid = user.Id });
             }
             catch (Exception ex)
             {
+                await Logger.ErrorAsync($"{MethodBase.GetCurrentMethod()?.Name} failed", ex, data: model);
                 return StatusCode(500, new { message = "Registration unsuccessful", error = ex.Message });
             }
         }
@@ -103,41 +104,47 @@ namespace clearTask.Server.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
-
-            #region DEMO USER
-            if (model.Email?.ToLower() == "demo@example.com" && model.Password == "demo123")
+            try
             {
-                var demoUser = new AppUserModel
+
+                #region DEMO USER
+                if (model.Email?.ToLower() == "demo@example.com" && model.Password == "demo123")
                 {
-                    Id = "demo-user",
-                    UserName = "DemoUser",
-                    Email = "demo@example.com",
-                    FirstName = "Demo",
-                    LastName = "User"
-                };
-                var dmtoken = GenerateJwtToken(demoUser);
+                    var demoUser = new AppUserModel
+                    {
+                        Id = "demo-user",
+                        UserName = "DemoUser",
+                        Email = "demo@example.com",
+                        FirstName = "Demo",
+                        LastName = "User"
+                    };
+                    var dmtoken = GenerateJwtToken(demoUser);
 
-                Logger.ErrorLog($"Demo token: {dmtoken}");
+                    return Ok(new { token = dmtoken, userid = demoUser.Id });
+                }
+                #endregion DEMO USER
 
 
-                return Ok(new { token = dmtoken, userid = demoUser.Id });
+                #region Validation
+                var user = await _userManager.FindByEmailAsync(model.Email);
+
+                if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password))
+                {
+                    return Unauthorized(new { message = "Invalid email or password" });
+                }
+                #endregion
+
+                #region Businness Logic
+                var token = GenerateJwtToken(user);
+                return Ok(new { token = token, userid = user.Id });
+                #endregion
             }
-            #endregion DEMO USER
-
-
-            #region Validation
-            var user = await _userManager.FindByEmailAsync(model.Email);
-
-            if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password))
+            catch (Exception ex)
             {
-                return Unauthorized(new { message = "Invalid email or password" });
-            }
-            #endregion
+                await Logger.ErrorAsync($"{MethodBase.GetCurrentMethod()?.Name} failed", ex, data: model);
+                return StatusCode(500, new { message = "Login unsuccessful", error = ex.Message });
 
-            #region Businness Logic
-            var token = GenerateJwtToken(user);
-            return Ok(new { token = token, userid = user.Id });
-            #endregion
+            }
         }
 
         [HttpPost("logout")]
@@ -151,20 +158,28 @@ namespace clearTask.Server.Controllers
         #region Internal Methods
         private string GenerateJwtToken(AppUserModel user)
         {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Key"] ?? throw new InvalidOperationException("JWT Key is not configured."));
-            var tokenDescriptor = new SecurityTokenDescriptor
+            try
             {
-                Subject = new ClaimsIdentity(new Claim[]
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Key"] ?? throw new InvalidOperationException("JWT Key is not configured."));
+                var tokenDescriptor = new SecurityTokenDescriptor
                 {
+                    Subject = new ClaimsIdentity(new Claim[]
+                    {
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
                 new Claim(ClaimTypes.Name, user.UserName ?? throw new InvalidOperationException("UserName is null"))
-                }),
-                Expires = DateTime.UtcNow.AddDays(7),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
+                    }),
+                    Expires = DateTime.UtcNow.AddDays(7),
+                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                };
+                var token = tokenHandler.CreateToken(tokenDescriptor);
+                return tokenHandler.WriteToken(token);
+            }
+            catch(Exception ex)
+            {
+                Task.Run(() => Logger.ErrorAsync($"{MethodBase.GetCurrentMethod()?.Name} failed", ex, data: user));
+                return "";
+            }
         }
         #endregion
 

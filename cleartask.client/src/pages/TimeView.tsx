@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react';
 import '../styles/TimeView.css';
 import Navbar from './NavBar';
 import { Task, getallTasks } from '../services/taskService';
+import { useNavigate } from 'react-router-dom';
 
 const TimeView: React.FC = () => {
+    const navigate = useNavigate();
     const [tasks, setTasks] = useState<Task[]>([]);
     const [selectedDate, setSelectedDate] = useState<Date>(new Date());
     const [selectedView, setSelectedView] = useState<'day' | 'month' | 'year'>('day');
     const userId = sessionStorage.getItem("userid") || "";
-    const listId = "";
 
     useEffect(() => {
         const fetchTasks = async () => {
@@ -33,62 +34,57 @@ const TimeView: React.FC = () => {
         };
 
         fetchTasks();
-    }, [userId, listId]);
+    }, [userId]);
 
     const getTaskPosition = (date: Date | string | undefined): number => {
-        try {
-            if (!date) return 0;
-            const taskDate = date instanceof Date ? date : new Date(date);
+        if (!date) return 0;
+        const taskDate = date instanceof Date ? date : new Date(date);
 
-            switch (selectedView) {
-                case 'day':
-                    {
-                        const hours = taskDate.getHours();
-                        const minutes = taskDate.getMinutes();
-                        const totalMinutes = hours * 60 + minutes;
-                        return (totalMinutes / 1440) * 100; // 1440 minutes in a day
-                    }
-                case 'month':
-                    {
-                        const daysInMonth = new Date(taskDate.getFullYear(), taskDate.getMonth() + 1, 0).getDate();
-                        return (taskDate.getDate() / daysInMonth) * 100;
-                    }
-                case 'year':
-                    {
-                        const daysInYear = 365; // Assuming non-leap year
-                        return (taskDate.getMonth() * 30 + taskDate.getDate()) / daysInYear * 100;
-                    }
-                default:
-                    return 0;
+        switch (selectedView) {
+            case 'day': {
+                const startOfDay = new Date(taskDate);
+                startOfDay.setHours(0, 0, 0, 0);
+                const timeDiff = taskDate.getTime() - startOfDay.getTime();
+                const minutesSinceMidnight = timeDiff / (1000 * 60);
+                return (minutesSinceMidnight / 1440) * 100; // 1440 minutes in a day
             }
-        } catch (error) {
-            console.error("Error calculating task position:", error);
-            return 0;
+            case 'month': {
+                const dayOfMonth = taskDate.getDate();
+                const daysInMonth = new Date(taskDate.getFullYear(), taskDate.getMonth() + 1, 0).getDate();
+                return ((dayOfMonth - 1) / (daysInMonth - 1)) * 100;
+            }
+            case 'year': {
+                const monthIndex = taskDate.getMonth();
+                const dayOfMonth = taskDate.getDate();
+                const daysInMonth = new Date(taskDate.getFullYear(), monthIndex + 1, 0).getDate();
+
+                // Calculate position based on month and day within month
+                const monthPosition = monthIndex / 12;
+                const dayPosition = (dayOfMonth - 1) / daysInMonth / 12;
+                return (monthPosition + dayPosition) * 100;
+            }
+            default:
+                return 0;
         }
     };
 
     const formatTaskTime = (date: Date | string | undefined): string => {
-        try {
-            if (!date) return '';
-            const taskDate = date instanceof Date ? date : new Date(date);
+        if (!date) return '';
+        const taskDate = date instanceof Date ? date : new Date(date);
 
-            switch (selectedView) {
-                case 'day':
-                    return taskDate.toLocaleTimeString([], {
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        hour12: false
-                    });
-                case 'month':
-                    return `${taskDate.getDate()} ${taskDate.toLocaleString('default', { month: 'short' })}`;
-                case 'year':
-                    return `${taskDate.toLocaleString('default', { month: 'short' })} ${taskDate.getDate()}`;
-                default:
-                    return '';
-            }
-        } catch (error) {
-            console.error("Error formatting time:", error);
-            return '';
+        switch (selectedView) {
+            case 'day':
+                return taskDate.toLocaleTimeString([], {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: false
+                });
+            case 'month':
+                return `${taskDate.getDate()} ${taskDate.toLocaleString('default', { month: 'short' })}`;
+            case 'year':
+                return `${taskDate.toLocaleString('default', { month: 'short' })} ${taskDate.getDate()}`;
+            default:
+                return '';
         }
     };
 
@@ -96,8 +92,29 @@ const TimeView: React.FC = () => {
         setSelectedView(view);
     };
 
-    const getDaysInMonth = (): number => {
-        return new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 0).getDate();
+    const getTimelineLabels = () => {
+        switch (selectedView) {
+            case 'day':
+                return Array.from({ length: 25 }, (_, i) => ({
+                    position: (i / 24) * 100,
+                    label: `${String(i).padStart(2, '0')}:00`
+                }));
+            case 'month': {
+                const daysInMonth = new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 0).getDate();
+                return Array.from({ length: daysInMonth }, (_, i) => ({
+                    position: (i / (daysInMonth - 1)) * 100,
+                    label: `${i + 1}`
+                }));
+            }
+            case 'year':
+                // Create 13 points to properly show start and end of each month
+                return Array.from({ length: 13 }, (_, i) => ({
+                    position: (i / 12) * 100,
+                    label: i < 12 ? new Date(2000, i).toLocaleString('default', { month: 'short' }) : ''
+                }));
+            default:
+                return [];
+        }
     };
 
     const getFilteredTasks = (): Task[] => {
@@ -118,9 +135,7 @@ const TimeView: React.FC = () => {
                         taskDate.getFullYear() === selectedDate.getFullYear()
                     );
                 case 'year':
-                    return (
-                        taskDate.getFullYear() === selectedDate.getFullYear()
-                    );
+                    return taskDate.getFullYear() === selectedDate.getFullYear();
                 default:
                     return false;
             }
@@ -165,27 +180,23 @@ const TimeView: React.FC = () => {
                                 <div>
                                     <select
                                         value={selectedDate.getMonth()}
-                                        onChange={(e) => setSelectedDate(new Date(selectedDate.getFullYear(), parseInt(e.target.value), selectedDate.getDate()))}
+                                        onChange={(e) => setSelectedDate(new Date(selectedDate.getFullYear(), parseInt(e.target.value), 1))}
                                     >
                                         {[
                                             'January', 'February', 'March', 'April', 'May', 'June',
-                                            'July', 'August', 'September', 'October', 'November', 'December',
+                                            'July', 'August', 'September', 'October', 'November', 'December'
                                         ].map((month, i) => (
-                                            <option key={i} value={i}>
-                                                {month}
-                                            </option>
+                                            <option key={i} value={i}>{month}</option>
                                         ))}
                                     </select>
                                     <select
                                         value={selectedDate.getFullYear()}
-                                        onChange={(e) => setSelectedDate(new Date(parseInt(e.target.value), selectedDate.getMonth(), selectedDate.getDate()))}
+                                        onChange={(e) => setSelectedDate(new Date(parseInt(e.target.value), selectedDate.getMonth(), 1))}
                                     >
-                                        {Array.from({ length: (2035 - new Date().getFullYear() + 1) }, (_, i) => {
-                                            const year = new Date().getFullYear() + i;  // Changed from subtract to add
+                                        {Array.from({ length: 11 }, (_, i) => {
+                                            const year = new Date().getFullYear() + i - 5;
                                             return (
-                                                <option key={year} value={year}>
-                                                    {year}
-                                                </option>
+                                                <option key={year} value={year}>{year}</option>
                                             );
                                         })}
                                     </select>
@@ -196,12 +207,10 @@ const TimeView: React.FC = () => {
                                     value={selectedDate.getFullYear()}
                                     onChange={(e) => setSelectedDate(new Date(parseInt(e.target.value), 0, 1))}
                                 >
-                                    {Array.from({ length: (2035 - new Date().getFullYear() + 1) }, (_, i) => {
-                                        const year = new Date().getFullYear() + i;  // Changed from subtract to add
+                                    {Array.from({ length: 11 }, (_, i) => {
+                                        const year = new Date().getFullYear() + i - 5;
                                         return (
-                                            <option key={year} value={year}>
-                                                {year}
-                                            </option>
+                                            <option key={year} value={year}>{year}</option>
                                         );
                                     })}
                                 </select>
@@ -213,6 +222,9 @@ const TimeView: React.FC = () => {
                                     key={task.id}
                                     className="timeline-task"
                                     style={{ left: `${getTaskPosition(task.dueDate)}%` }}
+                                    onClick={() => {
+                                        navigate('/tasks', { state: { selectedTaskId: task.id } });
+                                    }}
                                 >
                                     <div className="task-bubble">
                                         {task.title}
@@ -223,27 +235,19 @@ const TimeView: React.FC = () => {
                                     <div className="task-line"></div>
                                 </div>
                             ))}
-                        </div>
-                        <div className="timeline-scale">
-                            {selectedView === 'day' && Array.from({ length: 24 }, (_, i) => (
-                                <div key={i} className="timeline-tick">
-                                    <div className="timeline-label">{`${i}:00`}</div>
-                                </div>
-                            ))}
-                            {selectedView === 'month' && Array.from({ length: getDaysInMonth() }, (_, i) => (
-                                <div key={i} className="timeline-tick">
-                                    <div className="timeline-label">{i + 1}</div>
-                                </div>
-                            ))}
-                            {selectedView === 'year' && Array.from({ length: 12 }, (_, i) => (
-                                <div key={i} className="timeline-tick">
-                                    <div className="timeline-label">
-                                        {new Date(selectedDate.getFullYear(), i).toLocaleDateString('default', { month: 'short' })}
+                            <div className="timeline-scale">
+                                {getTimelineLabels().map(({ position, label }, index) => (
+                                    <div
+                                        key={index}
+                                        className="timeline-tick"
+                                        style={{ left: `${position}%` }}
+                                    >
+                                        <div className="timeline-label">{label}</div>
                                     </div>
-                                </div>
-                            ))}
+                                ))}
+                            </div>
                         </div>
-                    </div>]
+                    </div>
                 </div>
             </div>
         </div>

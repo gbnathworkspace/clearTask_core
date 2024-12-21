@@ -8,7 +8,6 @@ import LoadingPage from './pages/LoadingPage';
 import TasksPage from './pages/Tasks';
 import TimeView from './pages/TimeView';
 import Kanban from './pages/Kanban';
-import './styles/theme.css';
 
 const App: React.FC = () => {
     return (
