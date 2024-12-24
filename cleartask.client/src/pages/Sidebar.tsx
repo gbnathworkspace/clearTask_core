@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/Sidebar.css'; // Import the Sidebar styles
 import { getAllLists, createList, TaskList } from '../services/taskService';
-import { addNewList, deleteList } from '../services/listService'; // Import the reusable functions
+import { deleteList } from '../services/listService'; // Import the reusable functions
 import { FiTrash } from 'react-icons/fi';
 
 interface SidebarProps {
@@ -52,13 +52,16 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedList, setSelectedList }) => {
         if (!listName) return;
 
         try {
-            await addNewList(listName, userId, lists.map(l => l.name), setLists, async (list: TaskList) => {
-                await createList(list);
-                const response = await getAllLists(userId);
-                if (response?.data?.lists) {
-                    setLists(response.data.lists);
-                }
-            });
+            const newList: TaskList = {
+                listId: '',
+                name: listName,
+                userId: userId
+            };
+            await createList(newList);
+            const response = await getAllLists(userId);
+            if (response?.data?.lists) {
+                setLists(response.data.lists);
+            }
         } catch (error) {
             console.error('Error creating new list:', error);
         }

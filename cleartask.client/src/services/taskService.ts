@@ -173,7 +173,7 @@ export const deleteTask = async (Id: number) => {
 export const fetchTasks = async (
     userId: string,
     listId: string
-): Promise<any[]> => {
+): Promise<Task[]> => {
     try {
         const response = await getTasks(userId, listId);
         if (response && response.data && response.data.tasks) {

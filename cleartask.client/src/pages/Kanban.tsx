@@ -6,7 +6,6 @@ import { Task, getallTasks } from '../services/taskService';
 const Kanban: React.FC = () => {
     const [tasks, setTasks] = useState<Task[]>([]);
     const userId = sessionStorage.getItem("userid") || "";
-    const listId = userId;
 
     useEffect(() => {
         const fetchTasks = async () => {

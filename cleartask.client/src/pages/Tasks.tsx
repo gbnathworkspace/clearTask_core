@@ -88,9 +88,9 @@ const Tasks: React.FC = () => {
             console.error('Error creating task:', error);
         }
     };
-
     const handleTaskStatusToggle = async (task: Task) => {
         try {
+            if (!task.id) return; // Guard against undefined id
             await updateTaskStatus(task.id, !task.isCompleted);
             const updatedTasks = await fetchTasks(userId, listId);
             setTasks(updatedTasks);
@@ -155,7 +155,7 @@ const Tasks: React.FC = () => {
             </div>
             <div className="task-actions">
                 <FiEdit className="action-icon" onClick={() => console.log('Edit task:', task.id)} />
-                <FiTrash className="action-icon" onClick={() => handleDeleteTask(task.id)} />
+                <FiTrash className="action-icon" onClick={() => task.id && handleDeleteTask(task.id)} />
                 {isCompleted ? (
                     <FiRepeat className="action-icon" onClick={() => handleTaskStatusToggle(task)} />
                 ) : (

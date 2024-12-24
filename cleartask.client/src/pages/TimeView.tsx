@@ -16,16 +16,13 @@ const TimeView: React.FC = () => {
             try {
                 const response = await getallTasks(userId);
                 const tasksWithDates = response.data.tasks
-                    .filter(task => task.dueDate != null)
+                    .filter((task): task is Task & { dueDate: string | Date } => task.dueDate != null)
                     .map(task => ({
                         ...task,
-                        dueDate: new Date(task.dueDate as string)
+                        dueDate: new Date(task.dueDate)
                     }))
-                    .sort((a, b) => {
-                        const dateA = a.dueDate instanceof Date ? a.dueDate : new Date(a.dueDate);
-                        const dateB = b.dueDate instanceof Date ? b.dueDate : new Date(b.dueDate);
-                        return dateA.getTime() - dateB.getTime();
-                    });
+                    .sort((a, b) => a.dueDate.getTime() - b.dueDate.getTime());
+
 
                 setTasks(tasksWithDates);
             } catch (error) {
