@@ -16,7 +16,7 @@ namespace clearTask.Server.Controllers
     {
         private readonly UserManager<AppUserModel> _userManager = userManager;
 
-        [HttpGet]
+        [HttpGet("get")]
         public IActionResult Get()
         {
             return Ok("Test connection successful!");
