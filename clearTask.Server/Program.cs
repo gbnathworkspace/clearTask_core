@@ -10,6 +10,12 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Configuration
+    .SetBasePath(Directory.GetCurrentDirectory()) // Set the base directory to current
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true) // Default config
+    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true) // Env-specific config
+    .AddEnvironmentVariables(); // Add environment variables as well
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
