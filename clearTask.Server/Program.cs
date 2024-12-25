@@ -61,7 +61,10 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowAllOrigins",
         builder =>
         {
-            builder.WithOrigins("http://localhost:5174", "http://localhost:5173") // Add any other ports if needed
+            builder.WithOrigins("http://localhost:5174"
+                , "http://localhost:5173"
+                , "http://ec2-54-91-29-197.compute-1.amazonaws.com:4173" 
+                )
                    .AllowAnyHeader()
                    .AllowAnyMethod();
         });
@@ -133,5 +136,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.Urls.Add("http://0.0.0.0:5076");  // Listen on all interfaces
 
 app.Run();
