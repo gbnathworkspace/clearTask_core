@@ -126,6 +126,11 @@ namespace clearTask.Server.Controllers
 
 
                 #region Validation
+                if (string.IsNullOrEmpty(model.Email))
+                {
+                    return BadRequest(new { message = "Email is required" });
+                }
+
                 var user = await _userManager.FindByEmailAsync(model.Email);
 
                 if (user == null || !await _userManager.CheckPasswordAsync(user, model.Password))

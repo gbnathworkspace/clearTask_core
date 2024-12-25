@@ -22,12 +22,12 @@ namespace clearTask.Server.Models
         public int Id { get; set; }
         public DateTime Timestamp { get; set; }
         public LogLevel_ Level { get; set; }
-        public string Message { get; set; }
-        public string Function { get; set; }
-        public string Data { get; set; }
-        public string Exception { get; set; }
-        public string StackTrace { get; set; }
-        public string UserId { get; set; } // Optional: to track which user's action caused the log
+        public required string Message { get; set; }
+        public required string Function { get; set; }
+        public required string Data { get; set; }
+        public required string Exception { get; set; }
+        public required string StackTrace { get; set; }
+        public required string UserId { get; set; }
     }
 }
 

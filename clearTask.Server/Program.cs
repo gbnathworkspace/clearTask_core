@@ -5,53 +5,91 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Npgsql.EntityFrameworkCore.PostgreSQL;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Configuration
-    .SetBasePath(builder.Environment.ContentRootPath)
-    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
-    .AddEnvironmentVariables();
+// Configure environment and configuration sources
+ConfigureEnvironment(builder);
 
-// Log the current environment and configuration
-Console.WriteLine($"Current environment: {builder.Environment.EnvironmentName}");
-Console.WriteLine($"Connection string: {builder.Configuration.GetConnectionString("DefaultConnection")}");
+// Register services
+ConfigureServices(builder);
 
-// Rest of 
+var app = builder.Build();
 
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
+// Configure the HTTP request pipeline
+ConfigureMiddleware(app);
+
+// Start application
+app.Run();
+
+// Configuration method implementations
+void ConfigureEnvironment(WebApplicationBuilder builder)
 {
-    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-    Console.WriteLine($"Using connection string: {connectionString}");
-    options.UseNpgsql(connectionString);
-});
+    builder.Configuration
+        .SetBasePath(builder.Environment.ContentRootPath)
+        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+        .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
+        .AddEnvironmentVariables();
+}
 
-
-builder.Services.AddIdentity<AppUserModel, IdentityRole>()
-    .AddEntityFrameworkStores<ApplicationDbContext>()
-    .AddDefaultTokenProviders();
-
-// Configure JWT Authentication
-var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"]);
-builder.Services.AddAuthentication(options =>
+void ConfigureServices(WebApplicationBuilder builder)
 {
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-.AddJwtBearer(options =>
+    // Database
+    ConfigureDatabase(builder);
+
+    // Identity and Authentication
+    ConfigureIdentityAndAuth(builder);
+
+    // CORS
+    ConfigureCors(builder);
+
+    // Other Services
+    ConfigureAdditionalServices(builder);
+}
+
+void ConfigureDatabase(WebApplicationBuilder builder)
 {
-    options.RequireHttpsMetadata = false; // Make sure this is false for local development without HTTPS
-    options.SaveToken = true;
-    options.TokenValidationParameters = new TokenValidationParameters
+    builder.Services.AddDbContext<ApplicationDbContext>(options =>
     {
-        ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(key),
-        ValidateIssuer = false,
-        ValidateAudience = false,
-    };
+        var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+        options.UseNpgsql(connectionString);
+    });
+}
+
+void ConfigureIdentityAndAuth(WebApplicationBuilder builder)
+{
+    // Identity configuration
+    builder.Services.AddIdentity<AppUserModel, IdentityRole>()
+        .AddEntityFrameworkStores<ApplicationDbContext>()
+        .AddDefaultTokenProviders();
+
+    // JWT Authentication
+    var jwtKey = builder.Configuration["Jwt:Key"] ??
+        throw new InvalidOperationException("JWT Key is not configured in appsettings.json");
+    var key = Encoding.ASCII.GetBytes(jwtKey); 
+    builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddJwtBearer(options =>
+    {
+        options.RequireHttpsMetadata = false;
+        options.SaveToken = true;
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(key),
+            ValidateIssuer = false,
+            ValidateAudience = false,
+        };
+        ConfigureJwtEvents(options);
+    });
+}
+
+void ConfigureJwtEvents(JwtBearerOptions options)
+{
     options.Events = new JwtBearerEvents
     {
         OnMessageReceived = context =>
@@ -66,92 +104,90 @@ builder.Services.AddAuthentication(options =>
             return Task.CompletedTask;
         },
     };
-});
+}
 
-
-// In Program.cs
-
-
-builder.Services.AddCors(options =>
+void ConfigureCors(WebApplicationBuilder builder)
 {
-    options.AddPolicy("AllowAllOrigins",
-        builder =>
+    builder.Services.AddCors(options =>
+    {
+        options.AddPolicy("AllowAllOrigins", builder =>
         {
-            builder.WithOrigins("http://localhost:5174"
-                , "http://localhost:5173"
-                , "http://ec2-54-91-29-197.compute-1.amazonaws.com:4173" 
-                )
-                   .AllowAnyHeader()
-                   .AllowAnyMethod();
+            builder.WithOrigins(
+                "http://localhost:5174",
+                "http://localhost:5173",
+                "http://ec2-54-91-29-197.compute-1.amazonaws.com:4173"
+            )
+            .AllowAnyHeader()
+            .AllowAnyMethod();
         });
-});
-
-
-
-builder.Services.AddControllers();
-// Add Swagger services to the dependency injection container
-builder.Services.AddEndpointsApiExplorer();
-
-
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
-
-    // Enable authorization in Swagger
-    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-    {
-        Description = "JWT Authorization header using the Bearer scheme (Example: 'Bearer 12345abcdef')",
-        Name = "Authorization",
-        In = ParameterLocation.Header,
-        Type = SecuritySchemeType.ApiKey,
-        Scheme = "Bearer"
-    });
-
-    c.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }
-            },
-            Array.Empty<string>()
-        }
-    });
-});
-
-builder.Services.AddSingleton<Logger>();
-
-
-var app = builder.Build();
-
-
-// After building the app
-Logger.Initialize(app.Services.GetRequiredService<IServiceScopeFactory>());
-
-// Configure middleware
-if (app.Environment.IsDevelopment())
-{
-    app.UseDeveloperExceptionPage();
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
     });
 }
 
-app.UseRouting();
+void ConfigureAdditionalServices(WebApplicationBuilder builder)
+{
+    builder.Services.AddControllers();
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddSingleton<IRateLimitService, RateLimitService>();
+    builder.Services.AddSingleton<Logger>();
 
-app.UseCors("AllowAllOrigins"); // Enable the CORS policy
+    ConfigureSwagger(builder);
+}
 
+void ConfigureSwagger(WebApplicationBuilder builder)
+{
+    builder.Services.AddSwaggerGen(c =>
+    {
+        c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
 
-app.UseAuthentication();
-app.UseAuthorization();
+        c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+        {
+            Description = "JWT Authorization header using the Bearer scheme (Example: 'Bearer 12345abcdef')",
+            Name = "Authorization",
+            In = ParameterLocation.Header,
+            Type = SecuritySchemeType.ApiKey,
+            Scheme = "Bearer"
+        });
 
-app.MapControllers();
-app.Urls.Add("http://0.0.0.0:5076");  // Listen on all interfaces
+        c.AddSecurityRequirement(new OpenApiSecurityRequirement
+        {
+            {
+                new OpenApiSecurityScheme
+                {
+                    Reference = new OpenApiReference
+                    {
+                        Type = ReferenceType.SecurityScheme,
+                        Id = "Bearer"
+                    }
+                },
+                Array.Empty<string>()
+            }
+        });
+    });
+}
 
-app.Run();
+void ConfigureMiddleware(WebApplication app)
+{
+    // Initialize Logger
+    Logger.Initialize(app.Services.GetRequiredService<IServiceScopeFactory>());
+
+    // Development specific middleware
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseDeveloperExceptionPage();
+        app.UseSwagger();
+        app.UseSwaggerUI(c =>
+        {
+            c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+        });
+    }
+
+    // General middleware
+    app.UseRouting();
+    app.UseCors("AllowAllOrigins");
+    app.UseAuthentication();
+    app.UseAuthorization();
+    app.MapControllers();
+
+    // Configure listening addresses
+    app.Urls.Add("http://0.0.0.0:5076");
+}

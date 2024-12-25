@@ -1,4 +1,5 @@
-﻿using clearTask.Server.Models;
+﻿using clearTask.Server.Attributes;
+using clearTask.Server.Models;
 using clearTask.Server.Models.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -113,7 +114,7 @@ namespace clearTask.Server.Controllers
                     Description = TaskDto.Description ?? string.Empty,
                     IsCompleted = TaskDto.IsCompleted ?? false,
                     Priority = (int?)(TaskDto.Priority) ?? (int)Priority.Def,
-                    DueDate = DateTime.SpecifyKind(TaskDto.DueDate.Value, DateTimeKind.Utc),
+                    DueDate = TaskDto.DueDate?.ToUniversalTime(),
                     UserId = TaskDto.UserId,
                     ListId = string.IsNullOrWhiteSpace(TaskDto.ListId) ? TaskDto.UserId : TaskDto.ListId
                 };
@@ -147,7 +148,7 @@ namespace clearTask.Server.Controllers
                 }
                 #endregion
 
-                if (Id == null)
+                if (Id <= 0)
                 {
                     return BadRequest(new { message = "Invalid data", errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList() });
                 }
@@ -185,7 +186,11 @@ namespace clearTask.Server.Controllers
                 #endregion
 
 
-                TaskModel task = await _context.Tasks.FindAsync(taskID);
+                var task = await _context.Tasks.FindAsync(taskID);
+                if (task is null)
+                {
+                    return NotFound(new { message = "Task not found" });
+                }
                 if (task == null)
                     return BadRequest(new { Message = "task not found" });
                 task.IsCompleted = isCompleted;
@@ -235,10 +240,11 @@ namespace clearTask.Server.Controllers
                     return NotFound(new { message = "Task not found" });
                 }
                 #endregion
-
-                TaskModel task = await _context.Tasks.FindAsync(taskid);
-                if (task == null)
-                    return BadRequest(new { Message = "task not found" });
+                var task = await _context.Tasks.FindAsync(taskid);
+                if (task is null)
+                {
+                    return NotFound(new { message = "Task not found" });
+                }
 
                 return Ok(new { model = task });
             }
@@ -295,8 +301,8 @@ namespace clearTask.Server.Controllers
                         Description = t.Description ?? string.Empty, // Handle null by defaulting to an empty string
                         IsCompleted = t.IsCompleted, // Boolean cannot be null
                         UserId = t.UserId ?? string.Empty, // Handle null by defaulting to an empty string
-                        DueDate = t.DueDate != null ? DateTime.SpecifyKind(t.DueDate, DateTimeKind.Utc) : (DateTime?)null, // Handle null for DueDate
-                        Priority = t.Priority != null ? (Priority)t.Priority : Priority.Def, // Handle null by defaulting to Priority.Default
+                        DueDate = t.DueDate.HasValue ? DateTime.SpecifyKind(t.DueDate.Value, DateTimeKind.Utc) : null,
+                        Priority = t.Priority >= 0 ? (Priority)t.Priority : Priority.Def, // Handle null by defaulting to Priority.Default
                         ListId = t.ListId ?? string.Empty, // Handle null by defaulting to an empty string
                     })
                     .ToListAsync();
@@ -313,6 +319,7 @@ namespace clearTask.Server.Controllers
 
         [Authorize]
         [HttpGet("getalltasks")]
+        [RateLimit(seconds: 30, maxRequests: 20)] // Allow 20 requests per 30 seconds
         public async Task<IActionResult> GetAllTasks([FromQuery]string userId)
         {
             try
@@ -337,7 +344,7 @@ namespace clearTask.Server.Controllers
                                 Description = t.Description,
                                 IsCompleted = t.IsCompleted,
                                 UserId = t.UserId,
-                                DueDate = t.DueDate,
+                                DueDate = t.DueDate.HasValue ? DateTime.SpecifyKind(t.DueDate.Value, DateTimeKind.Utc) : null,
                                 Priority = (Priority)t.Priority,
                                 ListId = t.ListId
                             })
@@ -357,8 +364,8 @@ namespace clearTask.Server.Controllers
                         Description = t.Description ?? string.Empty, // Handle null by defaulting to an empty string
                         IsCompleted = t.IsCompleted, // Boolean cannot be null
                         UserId = t.UserId ?? string.Empty, // Handle null by defaulting to an empty string
-                        DueDate = t.DueDate != null ? DateTime.SpecifyKind(t.DueDate, DateTimeKind.Utc) : (DateTime?)null, // Handle null for DueDate
-                        Priority = t.Priority != null ? (Priority)t.Priority : Priority.Def, // Handle null by defaulting to Priority.Default
+                        DueDate = t.DueDate != null ? DateTime.SpecifyKind(t.DueDate.Value, DateTimeKind.Utc) : (DateTime?)null, // Handle null for DueDate
+                        Priority = (Priority)t.Priority,  // since t.Priority is an int, not nullable
                         ListId = t.ListId ?? string.Empty, // Handle null by defaulting to an empty string
                     })
                     .ToListAsync();
