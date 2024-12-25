@@ -10,9 +10,13 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configuring DB Service
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));  //for PostgreSQL
+{
+    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+    Console.WriteLine($"Using connection string: {connectionString}");
+    options.UseNpgsql(connectionString);
+});
+
 
 builder.Services.AddIdentity<AppUserModel, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
