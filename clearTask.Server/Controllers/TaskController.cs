@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Prometheus;
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Security.Claims;
@@ -61,8 +62,6 @@ namespace clearTask.Server.Controllers
                 _demoTasks.TryAdd(DEMO_USER_ID, initialTasks);
             }
         }
-
-
 
         #region POST METHODS
         [Authorize]
@@ -256,6 +255,9 @@ namespace clearTask.Server.Controllers
 
         [Authorize]
         [HttpPost("gettasks")]
+        [RateLimit(seconds: 30, maxRequests: 20)]
+        
+
         public async Task<IActionResult> GetTasks([FromBody] getTaskDto getTaskDto)
         {
             try

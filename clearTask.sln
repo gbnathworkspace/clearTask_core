@@ -7,6 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "clearTask.Server", "clearTa
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "cleartask.client", "cleartask.client\cleartask.client.esproj", "{9E82CB26-EB00-4A3D-A934-6CE8D483330D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4901160D-3439-4AB2-B004-3E8D1CF993CA}"
+	ProjectSection(SolutionItems) = preProject
+		auto.bat = auto.bat
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
