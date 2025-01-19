@@ -23,17 +23,8 @@ The Enhanced To-Do List Application is a full-stack project designed to help use
 - **Due Date and Timeline view**: Assign due dates to tasks and display them on a timeline for better visualization.
 - **Priority Management**: Set task priorities (High, Medium, Low) for better focus and task sorting.
 - **Real-Time Updates**: Share your to-do list with others and receive real-time updates using WebSockets.
-- **Task Sharing**: Share your task list with specific users for collaboration.
-- **Task Assignment**: Assign tasks to specific users in your shared list.
 - **Push Notifications**: Receive notifications before the due date of tasks.
 - **Responsive Design**: Optimized for desktop.
-- **Sentiment Analysis for Task Priority**: Uses client-side NLP.js to analyze task descriptions and assign priority automatically based on sentiment.
-
-### 🧠 Sentiment Analysis Feature
-The application now includes a client-side sentiment analysis feature using NLP.js:
-
-- **Lightweight Client-Side Processing**: No server costs, as sentiment analysis is performed directly in the browser.
-- **Automatic Priority Assignment**: Tasks with negative sentiment are assigned high priority, helping users address urgent tasks quickly.
 
 
 ## 🛠️ Technologies Used
@@ -41,7 +32,6 @@ The application now includes a client-side sentiment analysis feature using NLP.
 - **Backend**: ASP.NET Core, C#  
 - **Database**: PostgreSQL (AWS RDS)  
 - **Authentication**: JWT (JSON Web Token)  
-- **Real-Time Updates**: WebSocket (SignalR)
 - **Sentiment Analysis**: NLP.js (Client-side JavaScript NLP library)
 - **Styling**: CSS, Flexbox  
 - **API Testing**: Swagger  
