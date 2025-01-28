@@ -1,30 +1,30 @@
 
 
-account-id = 539247454368
-gopi-id = 539247454368
+account-id = iam**
+gopi-id = iam**
 
 //1. Login to AWS ECR
-aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 539247454368.dkr.ecr.us-east-1.amazonaws.com
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin iam**.dkr.ecr.us-east-1.amazonaws.com
 
 
 //build image
 docker buildx build -t cleartask:backend .
 
 //tag ecr
-docker tag cleartask:backend 539247454368.dkr.ecr.us-east-1.amazonaws.com/cleartask:backend
+docker tag cleartask:backend iam**.dkr.ecr.us-east-1.amazonaws.com/cleartask:backend
 
 //push to ecr
-docker push 539247454368.dkr.ecr.us-east-1.amazonaws.com/cleartask:backend
+docker push iam**.dkr.ecr.us-east-1.amazonaws.com/cleartask:backend
 
 //pull from putty
-docker pull 539247454368.dkr.ecr.us-east-1.amazonaws.com/cleartask:backend
+docker pull iam**.dkr.ecr.us-east-1.amazonaws.com/cleartask:backend
 
 //run from putty
-	docker run -d -p 8080:5076 539247454368.dkr.ecr.us-east-1.amazonaws.com/cleartask:backend
+	docker run -d -p 8080:5076 iam**.dkr.ecr.us-east-1.amazonaws.com/cleartask:backend
 
 
-docker buildx build -t 539247454368.dkr.ecr.us-east-1.amazonaws.com/cleartask:backend .
-docker push 539247454368.dkr.ecr.us-east-1.amazonaws.com/cleartask:backend
+docker buildx build -t iam**.dkr.ecr.us-east-1.amazonaws.com/cleartask:backend .
+docker push iam**.dkr.ecr.us-east-1.amazonaws.com/cleartask:backend
 
 
 

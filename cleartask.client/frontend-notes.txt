@@ -9,23 +9,23 @@ docker login
 docker push yourusername/cleartask-frontend:latest
 
 # Login to ECR
-aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 539247454368.dkr.ecr.us-east-1.amazonaws.com
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin iam.dkr.ecr.us-east-1.amazonaws.com
 
 # Build image
 docker buildx build -t cleartask:frontend .
-docker buildx build -t 539247454368.dkr.ecr.us-east-1.amazonaws.com/cleartask:frontend .
+docker buildx build -t iam**.dkr.ecr.us-east-1.amazonaws.com/cleartask:frontend .
 
 # Tag for ECR
 docker tag cleartask-front:frontend 539247454368.dkr.ecr.us-east-1.amazonaws.com/cleartask:frontend
  
 # Push to ECR
-docker push 539247454368.dkr.ecr.us-east-1.amazonaws.com/cleartask:frontend
+docker push iam**.dkr.ecr.us-east-1.amazonaws.com/cleartask:frontend
 
 # On EC2 (via Putty):
-docker pull 539247454368.dkr.ecr.us-east-1.amazonaws.com/cleartask:frontend
-docker run -d -p 3000:80 539247454368.dkr.ecr.us-east-1.amazonaws.com/cleartask:frontend
+docker pull iam*.dkr.ecr.us-east-1.amazonaws.com/cleartask:frontend
+docker run -d -p 3000:80 iam**.dkr.ecr.us-east-1.amazonaws.com/cleartask:frontend
 
 
-docker buildx build -t 539247454368.dkr.ecr.us-east-1.amazonaws.com/cleartask:frontend .
-docker push 539247454368.dkr.ecr.us-east-1.amazonaws.com/cleartask:frontend
+docker buildx build -t iam**.dkr.ecr.us-east-1.amazonaws.com/cleartask:frontend .
+docker push iam**.dkr.ecr.us-east-1.amazonaws.com/cleartask:frontend
 
