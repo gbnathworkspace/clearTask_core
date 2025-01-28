@@ -3,9 +3,6 @@
 account-id = 539247454368
 gopi-id = 539247454368
 
-gopi-access-id = AKIAX3DNHFCQP5QPZUWU
-gopi-access-key = Y92MDS1uZeTiH2eKktjyMDPjWXrIrMVW7q2oiubZ
-
 //1. Login to AWS ECR
 aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 539247454368.dkr.ecr.us-east-1.amazonaws.com
 
