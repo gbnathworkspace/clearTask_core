@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    environment:
+      - VITE_API_URL=http://localhost:5076
+
+  backend:
+    image: mcr.microsoft.com/dotnet/aspnet:8.0
+    expose:
+      - "5076"
+    environment:
+      - ASPNETCORE_URLS=http://+:5076

@@ -10,9 +10,11 @@ export default defineConfig({
         port: 5173,
         proxy: {
             '/api': {
-                target: 'http://localhost:5076',
+                target: process.env.NODE_ENV === 'production'
+                    ? 'http://nammaweb.live'
+                    : 'http://localhost:5076',
                 changeOrigin: true,
-                secure: false
+                secure: process.env.NODE_ENV === 'production'
             },
         },
     },
