@@ -115,7 +115,9 @@ void ConfigureCors(WebApplicationBuilder builder)
             builder.WithOrigins(
                 "http://localhost:5174",
                 "http://localhost:5173",
-                "http://ec2-54-91-29-197.compute-1.amazonaws.com:4173"
+                "http://ec2-54-91-29-197.compute-1.amazonaws.com:4173",
+                "https://nammaweb.live",  // Add your domain
+                "http://nammaweb.live"    // Add both http and https versions
             )
             .AllowAnyHeader()
             .AllowAnyMethod();
