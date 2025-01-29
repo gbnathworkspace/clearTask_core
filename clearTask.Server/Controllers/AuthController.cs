@@ -29,6 +29,8 @@ namespace clearTask.Server.Controllers
             _signInManager = signInManager;
             _configuration = configuration;
             _context = context;
+            var test = _context.Database.CanConnect();
+            Console.WriteLine(test ? "Database Connected!" : "Database Connection Failed!");
         }
         #endregion
 

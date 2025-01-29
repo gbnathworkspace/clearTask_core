@@ -12,14 +12,17 @@ namespace clearTask.Server.Controllers
 {
     [ApiController]
     [Route("api/user")]
-    public class UserProfileController(UserManager<AppUserModel> userManager) : ControllerBase
+    public class UserProfileController(UserManager<AppUserModel> userManager, ApplicationDbContext applicationDbContext) : ControllerBase
     {
         private readonly UserManager<AppUserModel> _userManager = userManager;
+        private readonly ApplicationDbContext _context = applicationDbContext;
 
         [HttpGet("get")]
         public IActionResult Get()
         {
-            return Ok("Test connection successful!");
+                var test = _context.Database.CanConnect();
+
+            return Ok(("Test connection successful!") + (test ? "Database Connected!" : "Database Connection Failed!"));
         }
 
         [HttpPost("edit")]
