@@ -9,7 +9,7 @@ const API_URL = `${CONFIG.API_BASE_URL}api/auth/`;
  * @returns A promise that resolves to the response from the API.
  */
 export const register = (userData: {
-    firstName: string, lastName: string, email: string, password: string, confirmPassword: string;
+    firstName: string, lastName: string, email: string, password: string;
 }) => {
 
     console.log("User Data:", userData);

@@ -26,7 +26,6 @@ const Register: React.FC = () => {
     const [lastName, setLastName] = useState<string>('');
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
-    const [confirmPassword, _] = useState<string>('');
     const [responseMessage, setResponseMessage] = useState<string | null>(null);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [errorDetails, setErrorDetails] = useState<string[] | null>(null);
@@ -57,7 +56,7 @@ const Register: React.FC = () => {
             navigate('/loading');
 
             setLastName('');
-            const response = await register({ firstName, lastName, email, password, confirmPassword });
+            const response = await register({ firstName, lastName, email, password});
             setResponseMessage('User registered successfully!');
             console.log('User registered:', response.data);
             const loginresponse = await login(email, password);

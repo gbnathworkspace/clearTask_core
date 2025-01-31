@@ -8,20 +8,21 @@ import LoadingPage from './pages/LoadingPage';
 import TasksPage from './pages/Tasks';
 import TimeView from './pages/TimeView';
 import Kanban from './pages/Kanban';
+import ProtectedRoute from './components/ProtectedRoute';
+
 
 const App: React.FC = () => {
     return (
         <Router>
             <Routes>
-                <Route path="/home" element={<Home />} />
+                <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/login" element={<Login />} />
-                <Route path="/" element={<LandingPage />}></Route>
-                <Route path='/tasks' element={<TasksPage />}></Route>
-                <Route path="/timeview" element={<TimeView />} />
-                <Route path="/kanban" element={<Kanban/>}/>
-                <Route path="/loading" element={<LoadingPage />} />
-
+                <Route path="/" element={<ProtectedRoute><LandingPage /></ProtectedRoute>}></Route>
+                <Route path='/tasks' element={<ProtectedRoute><TasksPage /></ProtectedRoute>}></Route>
+                <Route path="/timeview" element={<ProtectedRoute><TimeView /></ProtectedRoute>} />
+                <Route path="/kanban" element={<ProtectedRoute><Kanban /></ProtectedRoute>} />
+                <Route path="/loading" element={<ProtectedRoute><LoadingPage /></ProtectedRoute>} />
             </Routes>
         </Router>
     );
