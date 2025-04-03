@@ -26,4 +26,16 @@
         public string listId { get; set; } = "";
 
     }
+
+    public class userProfileDto
+    {
+        public string firstName { get; set; }
+        public string lastName { get; set; }
+        public string email { get; set; }
+        public string userName { get; set; }
+        public string phonenumber { get; set; }
+        public int noOfTasks { get; set; }
+        public string address { get; set; }
+        public int age { get; set; }
+    }
 }

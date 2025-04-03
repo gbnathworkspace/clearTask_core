@@ -9,6 +9,7 @@ import TasksPage from './pages/Tasks';
 import TimeView from './pages/TimeView';
 import Kanban from './pages/Kanban';
 import ProtectedRoute from './components/ProtectedRoute';
+import NewPage from './pages/test'
 
 
 const App: React.FC = () => {
@@ -23,6 +24,7 @@ const App: React.FC = () => {
                 <Route path="/timeview" element={<ProtectedRoute><TimeView /></ProtectedRoute>} />
                 <Route path="/kanban" element={<ProtectedRoute><Kanban /></ProtectedRoute>} />
                 <Route path="/loading" element={<ProtectedRoute><LoadingPage /></ProtectedRoute>} />
+                <Route path="/test" element={<NewPage />} />
             </Routes>
         </Router>
     );

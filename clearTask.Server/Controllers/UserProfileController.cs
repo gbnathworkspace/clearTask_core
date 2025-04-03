@@ -7,6 +7,8 @@ using System.Security.Claims;
 using clearTask.Server.Models;
 using clearTask.Server;
 using System.Reflection;
+using Microsoft.AspNetCore.Authorization;
+using clearTask.Server.Models.DTOs;
 
 namespace clearTask.Server.Controllers
 {
@@ -18,7 +20,7 @@ namespace clearTask.Server.Controllers
         private readonly ApplicationDbContext _context = applicationDbContext;
 
         [HttpGet("get")]
-        public IActionResult Get()
+        public IActionResult GetDBStatus()
         {
                 var test = _context.Database.CanConnect();
 
@@ -63,6 +65,31 @@ namespace clearTask.Server.Controllers
             }
         }
 
+        [HttpGet("getUserInfo/{id}")]
+        [Authorize]
+        public IActionResult GetUserProfile(string id)
+        {
+            if (string.IsNullOrWhiteSpace(id))
+                return BadRequest(new { error = "id is required" });
 
+            AppUserModel user = _context.AppUserModels.Find(id);
+            userProfileDto userdto = new userProfileDto();
+            userdto.firstName = user.FirstName;
+            userdto.lastName = user.LastName;
+            userdto.address = user.Address;
+            userdto.phonenumber = user.PhoneNumber;
+            userdto.age = Convert.ToInt32(string.IsNullOrEmpty(user.Age) == true ? 0 : user.Age);
+            userdto.email = user.Email;
+            userdto.userName = user.UserName;
+
+
+
+            if (user == null)
+                return NotFound(new { error = "user not found" });
+
+            return Ok(new { userdto });
+        }
     }
 }
+
+
