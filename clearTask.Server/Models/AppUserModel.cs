@@ -17,5 +17,6 @@ namespace clearTask.Server.Models
         public string Address { get; set; } = string.Empty;
         public string Age { get; set; } = string.Empty;
         public ICollection<TaskModel>? Tasks { get; set; }
+        public ICollection<HabiticaApiKeysModel>? HabiticaApiKeys { get; set; }
     }
 }

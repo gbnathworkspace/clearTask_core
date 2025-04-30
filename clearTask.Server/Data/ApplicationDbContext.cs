@@ -12,6 +12,7 @@ public class ApplicationDbContext : IdentityDbContext<AppUserModel>
     public DbSet<TaskModel> Tasks { get; set; }
     public DbSet<TaskListModel> TaskListModels { get; set; }
     public DbSet<LogEntry> Logs { get; set; } // Add this line
+    public DbSet<HabiticaApiKeysModel> HabiticaApiKeys { get; set; } = null!;
 
 }
 

@@ -38,4 +38,10 @@
         public string address { get; set; }
         public int age { get; set; }
     }
+    public class HabiticaApiKeysDto
+    {
+        public string userId {get; set;} = string.Empty;
+        public string Apikey {get; set;} = string.Empty;
+        public string ApiSecret {get; set;} = string.Empty;
+    }
 }
