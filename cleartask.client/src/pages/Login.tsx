@@ -34,6 +34,7 @@ const Login: React.FC = () => {
         setSuccessMessage(null);
 
         try {
+            navigate('/loading');
             const response = await login(email, password);
             const responseData = response.data as LoginResponse;
             sessionStorage.setItem('token', responseData.token);

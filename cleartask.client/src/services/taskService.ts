@@ -1,8 +1,9 @@
 import axios from 'axios';
 import CONFIG from '../config';
+import { checkToken ,getHeaders } from '../utils/authUtils';
 
 
-const API_BASE_URL = `${ CONFIG.API_BASE_URL }api/task`;
+const API_BASE_URL_task = `${ CONFIG.API_BASE_URL }api/task`;
 const API_BASE_URL_ = `${ CONFIG.API_BASE_URL }api`;
 export enum Priority {
     def = 0,
@@ -41,12 +42,7 @@ interface GetListResponse {
 
 
 export const getAllLists = async (userId: string): Promise<{ data: GetListResponse }> => {
-    const token = sessionStorage.getItem('token'); // Retrieve token each time
-
-    if (!token) {
-        console.error('No token found in session storage');
-        throw new Error('Unauthorized');
-    }
+    const token = checkToken()
 
     return await axios.get(`${API_BASE_URL_}/list/getlists`, {
         headers: {
@@ -57,12 +53,7 @@ export const getAllLists = async (userId: string): Promise<{ data: GetListRespon
 }
 
 export const createList = async (list: TaskList) => {
-    const token = sessionStorage.getItem('token'); // Retrieve token each time
-
-    if (!token) {
-        console.error('No token found in session storage');
-        throw new Error('Unauthorized');
-    }
+    const token = checkToken();
 
     return await axios.post(`${API_BASE_URL_}/list/createlist`, list, {
         headers:
@@ -75,15 +66,11 @@ export const createList = async (list: TaskList) => {
 
 // Function to get all tasks for a specific user
 export const getTasks = async (userId: string, listId: string): Promise<{ data: GetTasksResponse }> => {
-    const token = sessionStorage.getItem('token'); // Retrieve token each time
+    const token = checkToken();
 
-    if (!token) {
-        console.error('No token found in session storage');
-        throw new Error('Unauthorized');
-    }
 
     return await axios.post(
-        `${API_BASE_URL}/gettasks`,
+        `${API_BASE_URL_task}/gettasks`,
         { userId, listId }, // Body of the request
         {
             headers: {
@@ -95,15 +82,11 @@ export const getTasks = async (userId: string, listId: string): Promise<{ data: 
 };
 
 export const getallTasks = async (userId: string): Promise<{ data: GetTasksResponse }> => {
-    const token = sessionStorage.getItem('token'); // Retrieve token each time
+    const token = checkToken();
 
-    if (!token) {
-        console.error('No token found in session storage');
-        throw new Error('Unauthorized');
-    }
 
     return await axios.get(
-        `${API_BASE_URL}/getalltasks`,
+        `${API_BASE_URL_task}/getalltasks`,
         {
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -115,17 +98,10 @@ export const getallTasks = async (userId: string): Promise<{ data: GetTasksRespo
 
 // Function to create a new task
 export const createTask = async (task: Task) => {
-    console.log(API_BASE_URL);
-    const token = sessionStorage.getItem('token');
-    if (!token) {
-        console.error('No token found in session storage');
-        throw new Error('Unauthorized');
-    }
-    else {
-        console.log(token);
-    }
+    const token = checkToken();
 
-    return await axios.post(`${API_BASE_URL}/createtask`, task, {
+
+    return await axios.post(`${API_BASE_URL_task}/createtask`, task, {
         headers: {
             Authorization: `Bearer ${token}`,
         },
@@ -135,13 +111,10 @@ export const createTask = async (task: Task) => {
 
 // Function to update the completion status of a task
 export const updateTaskStatus = async (taskId: number, isCompleted: boolean) => {
-    const token = sessionStorage.getItem('token'); // Retrieve token each time
-    if (!token) {
-        console.error('No token found in session storage');
-        throw new Error('Unauthorized');
-    }
+    const token = checkToken();
 
-    return await axios.patch(`${API_BASE_URL}/updatetaskstatus`, null, {
+
+    return await axios.patch(`${API_BASE_URL_task}/updatetaskstatus`, null, {
         headers: {
             Authorization: `Bearer ${token}`,
         },
@@ -154,17 +127,11 @@ export const updateTaskStatus = async (taskId: number, isCompleted: boolean) => 
 
 // Function to delete a task
 export const deleteTask = async (Id: number) => {
-    const token = sessionStorage.getItem('token'); // Retrieve token each time
-    if (!token) {
-        console.error('No token found in session storage');
-        throw new Error('Unauthorized');
-    }
+    const headers = getHeaders();
 
     // Make the Axios request to delete the task
-    return await axios.post(`${API_BASE_URL}/deletetask`, null, {
-        headers: { 
-            Authorization: `Bearer ${token}`,
-        },
+    return await axios.post(`${API_BASE_URL_task}/deletetask`, null, {
+        headers,
         params: { Id : Id },
     });
 };

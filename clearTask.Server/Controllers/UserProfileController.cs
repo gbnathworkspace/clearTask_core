@@ -65,15 +65,17 @@ namespace clearTask.Server.Controllers
             }
         }
 
-        [HttpGet("getUserInfo/{id}")]
+        [HttpGet("getUserInfo")]
         [Authorize]
-        public IActionResult GetUserProfile(string id)
+        public IActionResult GetUserProfile([FromQuery]string id)
         {
             if (string.IsNullOrWhiteSpace(id))
                 return BadRequest(new { error = "id is required" });
 
             AppUserModel user = _context.AppUserModels.Find(id);
-            userProfileDto userdto = new userProfileDto();
+            UserProfileDto userdto = new UserProfileDto();
+            if(user == null)
+                return NotFound();
             userdto.firstName = user.FirstName;
             userdto.lastName = user.LastName;
             userdto.address = user.Address;
@@ -88,6 +90,37 @@ namespace clearTask.Server.Controllers
                 return NotFound(new { error = "user not found" });
 
             return Ok(new { userdto });
+        }
+
+        [HttpGet("getAllUsers")]
+        [Authorize]
+        public IActionResult GetAllUsers()
+        {
+            List<AppUserModel> user = [.. _context.AppUserModels];
+            if (user == null || user.Count ==0)
+                return NotFound();
+
+            List<UserProfileDto> userDtoList = [];
+            foreach (AppUserModel appuser in user)
+            {
+                UserProfileDto userdto = new()
+                {
+                    UserId = appuser.Id,
+                    firstName = appuser.FirstName,
+                    lastName = appuser.LastName,
+                    address = appuser.Address,
+                    phonenumber = appuser.PhoneNumber ?? "",
+                    age = Convert.ToInt32(string.IsNullOrEmpty(appuser.Age) == true ? 0 : appuser.Age),
+                    email = appuser.Email ?? "",
+                    userName = appuser.UserName ?? ""
+                };
+                userDtoList.Add(userdto);
+            }
+
+            if (user == null)
+                return NotFound(new { error = "user not found" });
+
+            return Ok(new { users = userDtoList });
         }
     }
 }

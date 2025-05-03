@@ -1,7 +1,11 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace clearTask.Server.Models
 {
     public class HabiticaApiKeysModel
     {
+        [Key]
+        public string Id { get; set; } = string.Empty;
         public string ApiKey { get; set; } = string.Empty;
         public string ApiSecret { get; set; } = string.Empty;
         public AppUserModel? AppUser { get; set; } = null!;

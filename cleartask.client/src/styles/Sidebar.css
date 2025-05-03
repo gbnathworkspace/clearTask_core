@@ -1,6 +1,21 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    width: 100%;
+    /* Take full width of parent */
+    /* Changed from flex: 1 - don't grow, don't shrink, size based on content */
+    /* Distributes space evenly */
+}
+
+
 /* Sidebar Container */
+
 .sidebar {
+    flex: 0 0 auto;
+    /* Don't grow, don't shrink */
     width: 280px;
+    margin-left: -90px;
     padding: 20px;
     background-color: #F7F7F5;
     border-radius: 10px;
@@ -10,18 +25,23 @@
     align-items: center;
     justify-content: center;
     gap: 20px;
-    align-self: flex-start; /* Prevents stretching */
+    align-self: flex-start;
+    /* Prevents stretching */
 }
 
-    /* Header Styling */
-    .sidebar h3 {
-        font-size: 1.5rem;
-        color: #333;
-        font-weight: 600;
-        margin-bottom: 20px;
-    }
+
+/* Header Styling */
+
+.sidebar h3 {
+    font-size: 1.5rem;
+    color: #333;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
 
 /* List Items Styling */
+
 .list-items {
     list-style: none;
     padding: 0;
@@ -30,70 +50,81 @@
     flex-direction: column;
     gap: 10px;
     max-height: 33vh;
-    overflow-y: auto; /* Ensures scrollbar is only vertical */
-    scrollbar-gutter: stable; /* Reserve space for scrollbar */
-
-    box-sizing: border-box; /* ensures padding is included in the element's total width */
+    overflow-y: auto;
+    /* Ensures scrollbar is only vertical */
+    scrollbar-gutter: stable;
+    /* Reserve space for scrollbar */
+    box-sizing: border-box;
+    /* ensures padding is included in the element's total width */
 }
 
 
-    /* Default hidden scrollbar but space preserved */
-    .list-items::-webkit-scrollbar {
-        width: 8px; /* Ensure the width matches expected scrollbar width */
-        background: transparent; /* Keep the background transparent */
-    }
+/* Default hidden scrollbar but space preserved */
 
-    /* Hide scrollbar effectively */
-    .list-items::-webkit-scrollbar-thumb {
-        background-color: transparent; /* Hidden scrollbar thumb */
-    }
-
-    .list-items::-webkit-scrollbar-track {
-        background: transparent; /* Hidden scrollbar track */
-    }
-
-    /* Show scrollbar on hover with specific styles */
-    .list-items:hover::-webkit-scrollbar-thumb {
-        background-color: #3498db; /* Visible scrollbar thumb on hover */
-        border-radius: 10px;
-        border: 3px solid #f0f0f0;
-    }
-
-    .list-items:hover::-webkit-scrollbar-track {
-        background: #f0f0f0;
-        border-radius: 10px;
-    }
-
-    .list-items::-webkit-scrollbar-thumb:hover {
-        background-color: #3498db; /* Ensure scrollbar thumb is visible on hover over the thumb itself */
-    }
+.list-items::-webkit-scrollbar {
+    width: 8px;
+    /* Ensure the width matches expected scrollbar width */
+    background: transparent;
+    /* Keep the background transparent */
+}
 
 
+/* Hide scrollbar effectively */
 
-    .list-items li {
-        padding: 12px;
-        font-size: 1rem;
-        color: #555;
-        cursor: pointer;
-        border-radius: 8px;
-        text-align: center;
-        transition: all 0.3s ease;
-        border: 1px solid transparent;
-    }
+.list-items::-webkit-scrollbar-thumb {
+    background-color: transparent;
+    /* Hidden scrollbar thumb */
+}
 
-
-        /* Hover Effect */
-        .list-items li:hover {
-            background-color: #e0e0e0;
-            border-color: #ddd;
-        }
+.list-items::-webkit-scrollbar-track {
+    background: transparent;
+    /* Hidden scrollbar track */
+}
 
 
-    .list-items li {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
+/* Show scrollbar on hover with specific styles */
+
+.list-items:hover::-webkit-scrollbar-thumb {
+    background-color: #3498db;
+    /* Visible scrollbar thumb on hover */
+    border-radius: 10px;
+    border: 3px solid #f0f0f0;
+}
+
+.list-items:hover::-webkit-scrollbar-track {
+    background: #f0f0f0;
+    border-radius: 10px;
+}
+
+.list-items::-webkit-scrollbar-thumb:hover {
+    background-color: #3498db;
+    /* Ensure scrollbar thumb is visible on hover over the thumb itself */
+}
+
+.list-items li {
+    padding: 12px;
+    font-size: 1rem;
+    color: #555;
+    cursor: pointer;
+    border-radius: 8px;
+    text-align: center;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+}
+
+
+/* Hover Effect */
+
+.list-items li:hover {
+    background-color: #e0e0e0;
+    border-color: #ddd;
+}
+
+.list-items li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
 .delete-icon {
     color: #666;
@@ -114,14 +145,18 @@
     flex-grow: 1;
 }
 
+
 /* Active List Item */
+
 .active-list {
     background-color: #007bff;
     color: #fff;
     border: 1px solid #0056b3;
 }
 
+
 /* New List Button */
+
 .new-list-button {
     padding: 12px;
     width: 100%;
@@ -135,12 +170,16 @@
     transition: background-color 0.3s ease;
 }
 
-    /* Hover Effect for New List Button */
-    .new-list-button:hover {
-        background-color: #0056b3;
-    }
+
+/* Hover Effect for New List Button */
+
+.new-list-button:hover {
+    background-color: #0056b3;
+}
+
 
 /* Responsive Design for Mobile View */
+
 @media (max-width: 768px) {
     .sidebar {
         width: 100%;
@@ -149,18 +188,15 @@
         box-shadow: none;
         border-bottom: 1px solid #ddd;
     }
-
     .list-items {
         flex-direction: row;
         gap: 5px;
         justify-content: center;
     }
-
-        .list-items li {
-            padding: 8px;
-            font-size: 0.9rem;
-        }
-
+    .list-items li {
+        padding: 8px;
+        font-size: 0.9rem;
+    }
     .new-list-button {
         padding: 10px;
         font-size: 0.9rem;

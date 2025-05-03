@@ -94,28 +94,30 @@ const Sidebar: React.FC<SidebarProps> = ({ selectedList, setSelectedList }) => {
     };
 
     return (
-        <div className="sidebar">
-            <h3>Lists</h3>
-            <ul className="list-items">
-                {lists.map((list) => (
-                    <li
-                        key={list.listId}
-                        className={selectedList === list.listId ? 'active-list' : ''}
-                        onClick={() => handleListClick(list.listId)}
-                    >
-                        <span className="list-name">{list.name}</span>
-                        {list.listId !== userId && (
-                            <FiTrash
-                                className="delete-icon"
-                                onClick={(e) => handleDeleteList(list.listId, e)}
-                            />
-                        )}
-                    </li>
-                ))}
-            </ul>
-            <button className="new-list-button" onClick={handleNewList}>
-                New List
-            </button>
+        <div className = "container">
+            <div className="sidebar">
+                <h3>Lists</h3>
+                <ul className="list-items">
+                    {lists.map((list) => (
+                        <li
+                            key={list.listId}
+                            className={selectedList === list.listId ? 'active-list' : ''}
+                            onClick={() => handleListClick(list.listId)}
+                        >
+                            <span className="list-name">{list.name}</span>
+                            {list.listId !== userId && (
+                                <FiTrash
+                                    className="delete-icon"
+                                    onClick={(e) => handleDeleteList(list.listId, e)}
+                                />
+                            )}
+                        </li>
+                    ))}
+                </ul>
+                <button className="new-list-button" onClick={handleNewList}>
+                    New List
+                </button>
+            </div>
         </div>
     );
 };

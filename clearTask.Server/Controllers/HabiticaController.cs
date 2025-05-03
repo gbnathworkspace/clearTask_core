@@ -41,6 +41,7 @@ namespace clearTask.Server.Controllers
             }
         }
 
+        [HttpPost("keys")]
         public async Task<IActionResult> AddKeys(HabiticaApiKeysDto keys)
         {
             try

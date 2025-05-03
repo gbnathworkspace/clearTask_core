@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Navbar from './NavBar';
 import { Clock, Calendar, CheckSquare, TrendingUp, Activity, Star } from 'lucide-react';
 import '../styles/Home.css';
+import { getUserName } from "../utils/userUtils";
 
 interface Stats {
     tasksCompleted: number;
@@ -29,11 +30,15 @@ const Home: React.FC = () => {
             streakDays: 7
         });
 
-        // Get user's first name from session storage or API
-        const userId = sessionStorage.getItem('userid');
-        if (userId) {
-            setUserName('User'); // Replace with actual user name from API
-        }
+        const fetchUserName = async () => {
+            const userId = sessionStorage.getItem('userid');
+            if (userId) {
+                const name = await getUserName(userId);
+                setUserName(name);
+            }
+        };
+
+        fetchUserName(); // Call the async function
     }, []);
 
     const recentActivities = [

@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import React from 'react';
 import { useState } from 'react';
 import { register, login } from '../services/authService';
 import { useNavigate } from 'react-router-dom';

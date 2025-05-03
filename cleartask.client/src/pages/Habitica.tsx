@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { HabiticaService } from '../services/habiticaService.ts';
+import { HabiticaService } from '../services/habiticaService';
 
 const Habitica: React.FC = () => {
 

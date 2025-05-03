@@ -16,11 +16,13 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "baseUrl": ".",
+    "baseUrl": "./src",
     "paths": {
-      "@/*": [ "src/*" ]
-    }
+      "@/*": ["./*"],
+      "@utils/*": ["src/utils/*"],
+      "@services/*": ["./services/*"]
+    },
   },
-  "include": [ "src" ],
-  "references": [ { "path": "./tsconfig.node.json" } ]
+  "include": ["vite.config.ts", "src/**/*.ts", "src/**/*.tsx"],
+ "references": [ { "path": "./tsconfig.node.json" } ]
 }

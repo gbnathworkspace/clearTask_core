@@ -168,6 +168,7 @@ const Tasks: React.FC = () => {
     return (
         <div className="tasks-page">
             <Navbar />
+
             <div className="tasks-content">
                 <Sidebar
                     selectedList={selectedList}
@@ -176,6 +177,7 @@ const Tasks: React.FC = () => {
                         setListId(list);
                     }}
                 />
+                
                 <div className="main-content">
                     <button
                         className="add-task-button"

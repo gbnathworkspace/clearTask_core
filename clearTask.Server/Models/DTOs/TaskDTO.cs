@@ -27,15 +27,16 @@
 
     }
 
-    public class userProfileDto
+    public class UserProfileDto
     {
-        public string firstName { get; set; }
-        public string lastName { get; set; }
-        public string email { get; set; }
-        public string userName { get; set; }
-        public string phonenumber { get; set; }
+        public string UserId {get; set;} = string.Empty;
+        public string firstName { get; set; } = string.Empty;
+        public string lastName { get; set; } = string.Empty;
+        public string email { get; set; } = string.Empty;
+        public string userName { get; set; } = string.Empty;
+        public string phonenumber { get; set; } = string.Empty;
         public int noOfTasks { get; set; }
-        public string address { get; set; }
+        public string address { get; set; } = string.Empty;
         public int age { get; set; }
     }
     public class HabiticaApiKeysDto

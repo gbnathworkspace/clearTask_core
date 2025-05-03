@@ -1,7 +1,10 @@
 /* Page Layout */
+
 .tasks-page {
     height: 100vh;
     width: 100vw;
+    display: flex;
+    /* This is the critical change */
     flex-direction: column;
     background-color: #ffffff;
     overflow: hidden;
@@ -9,15 +12,20 @@
 
 .tasks-content {
     display: flex;
-    margin-left: -120px;
+    flex-direction: row;
     margin-top: 100px;
-    height: 100vh;
+    height: calc(100vh - 100px);
     background-color: #ffffff;
     flex: 1;
+    width: 100%;
+    justify-content: center;
+    /* Center the content horizontally */
 }
 
 .main-content {
-    flex: 1;
+    flex: 0 1 auto;
+    /* Don't grow, allow shrink, auto width */
+    /* Don't grow, do shrink if needed, auto width */
     background-color: #F7F7F5;
     padding: 40px;
     padding-bottom: 100px;
@@ -29,38 +37,44 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     border-radius: 10px;
     scrollbar-gutter: stable;
+    width: 1000%;
+    /* Take full width up to max-width */
 }
 
-    /* Scrollbar Styling */
-    .main-content::-webkit-scrollbar {
-        width: 8px;
-        background: transparent;
-    }
 
-    .main-content::-webkit-scrollbar-thumb {
-        background-color: transparent;
-    }
+/* Scrollbar Styling */
 
-    .main-content::-webkit-scrollbar-track {
-        background: transparent;
-    }
+.main-content::-webkit-scrollbar {
+    width: 8px;
+    background: transparent;
+}
 
-    .main-content:hover::-webkit-scrollbar-thumb {
-        background-color: #3498db;
-        border-radius: 10px;
-        border: 3px solid #f0f0f0;
-    }
+.main-content::-webkit-scrollbar-thumb {
+    background-color: transparent;
+}
 
-    .main-content:hover::-webkit-scrollbar-track {
-        background: #f0f0f0;
-        border-radius: 10px;
-    }
+.main-content::-webkit-scrollbar-track {
+    background: transparent;
+}
 
-    .main-content::-webkit-scrollbar-thumb:hover {
-        background-color: #3498db;
-    }
+.main-content:hover::-webkit-scrollbar-thumb {
+    background-color: #3498db;
+    border-radius: 10px;
+    border: 3px solid #f0f0f0;
+}
+
+.main-content:hover::-webkit-scrollbar-track {
+    background: #f0f0f0;
+    border-radius: 10px;
+}
+
+.main-content::-webkit-scrollbar-thumb:hover {
+    background-color: #3498db;
+}
+
 
 /* Task List Styling */
+
 .task-list {
     display: flex;
     flex-direction: column;
@@ -71,7 +85,9 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+
 /* Task Card Styling */
+
 .task-card {
     position: relative;
     display: flex;
@@ -86,20 +102,25 @@
     background-color: #ffffff;
 }
 
-    .task-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-    }
+.task-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
 
-    .task-card.completed {
-        background-color: #f3f4f6;
-    }
+.task-card.completed {
+    background-color: #f3f4f6;
+}
+
 
 /* Task Details */
+
 .task-details {
     display: flex;
     flex-direction: column;
-    flex: 1;
+    width: 50%;
+    /* Or whatever width you prefer */
+    flex: 0 0 auto;
+    /* Don't grow, don't shrink */
     gap: 5px;
 }
 
@@ -123,7 +144,9 @@
     color: #333;
 }
 
+
 /* Task Actions */
+
 .task-actions {
     display: flex;
     align-items: center;
@@ -131,18 +154,20 @@
     color: #333;
 }
 
-    .task-actions svg {
-        width: 24px;
-        height: 24px;
-        cursor: pointer;
-        transition: color 0.2s ease;
-    }
+.task-actions svg {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
 
-        .task-actions svg:hover {
-            color: #007bff;
-        }
+.task-actions svg:hover {
+    color: #007bff;
+}
+
 
 /* Priority Styling */
+
 .priority-indicator {
     width: 4px;
     height: 100%;
@@ -198,7 +223,9 @@
     color: #9ca3af;
 }
 
+
 /* Modal styles */
+
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -209,7 +236,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding:10px;
+    padding: 10px;
     z-index: 1000;
 }
 
@@ -223,7 +250,9 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+
 /* Close button */
+
 .close-modal {
     position: absolute;
     top: 16px;
@@ -239,12 +268,14 @@
     justify-content: center;
 }
 
-    .close-modal:hover {
-        background-color: #f5f5f5;
-        color: #333;
-    }
+.close-modal:hover {
+    background-color: #f5f5f5;
+    color: #333;
+}
+
 
 /* Form elements */
+
 .modal-form {
     display: flex;
     flex-direction: column;
@@ -261,19 +292,21 @@
     background-color: #f9f9f9;
 }
 
-    .modal-input:focus,
-    .modal-textarea:focus {
-        outline: none;
-        border-color: #007bff;
-        box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1);
-    }
+.modal-input:focus,
+.modal-textarea:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1);
+}
 
 .modal-textarea {
     min-height: 100px;
     resize: none;
 }
 
+
 /* Date and time inputs */
+
 .date-time-inputs {
     display: flex;
     gap: 16px;
@@ -283,24 +316,26 @@
     flex: 1;
 }
 
-    .input-group label {
-        display: block;
-        margin-bottom: 4px;
-        font-size: 14px;
-        color: #666;
-    }
+.input-group label {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 14px;
+    color: #666;
+}
 
-    .input-group input {
-        width: 100%;
-        padding: 10px;
-        border: 1px solid #e0e0e0;
-        border-radius: 8px;
-        font-size: 14px;
-        color: #333;
-        background-color: #f9f9f9;
-    }
+.input-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #333;
+    background-color: #f9f9f9;
+}
+
 
 /* Priority buttons */
+
 .priority-buttons {
     display: flex;
     flex-wrap: wrap;
@@ -321,17 +356,19 @@
     transition: all 0.2s ease;
 }
 
-    .priority-button:hover {
-        background-color: #f0f0f0;
-    }
+.priority-button:hover {
+    background-color: #f0f0f0;
+}
 
-    .priority-button.active {
-        background-color: #007bff;
-        border-color: #007bff;
-        color: white;
-    }
+.priority-button.active {
+    background-color: #007bff;
+    border-color: #007bff;
+    color: white;
+}
+
 
 /* Action buttons */
+
 .modal-actions {
     display: flex;
     justify-content: flex-end;
@@ -354,9 +391,9 @@
     color: #666;
 }
 
-    .cancel-button:hover {
-        background-color: #e0e0e0;
-    }
+.cancel-button:hover {
+    background-color: #e0e0e0;
+}
 
 .submit-button {
     background-color: #007bff;
@@ -364,30 +401,32 @@
     color: white;
 }
 
-    .submit-button:hover {
-        background-color: #0056b3;
-    }
+.submit-button:hover {
+    background-color: #0056b3;
+}
+
 
 /* Form Elements */
+
 .task-input-bar {
     display: flex;
     flex-direction: column;
     gap: 16px;
 }
 
-    .task-input-bar input,
-    .calendar-popup input,
-    .task-title input,
-    .task-title textarea {
-        width: 100%;
-        padding: 12px;
-        font-size: 1rem;
-        border: 1px solid #e0e0e0;
-        border-radius: 8px;
-        background-color: white;
-        color: #333;
-        transition: border-color 0.2s, box-shadow 0.2s;
-    }
+.task-input-bar input,
+.calendar-popup input,
+.task-title input,
+.task-title textarea {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: white;
+    color: #333;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
 
 input:focus,
 textarea:focus {
@@ -401,13 +440,17 @@ textarea {
     resize: vertical;
 }
 
+
 /* Calendar Picker Customization */
+
 input[type="date"]::-webkit-calendar-picker-indicator,
 input[type="time"]::-webkit-calendar-picker-indicator {
     filter: invert(0.5);
 }
 
+
 /* Buttons */
+
 .add-task-button {
     background-color: #007bff;
     color: white;
@@ -420,13 +463,13 @@ input[type="time"]::-webkit-calendar-picker-indicator {
     transition: background-color 0.2s, transform 0.1s;
 }
 
-    .add-task-button:hover {
-        background-color: #0056b3;
-    }
+.add-task-button:hover {
+    background-color: #0056b3;
+}
 
-    .add-task-button:active {
-        transform: translateY(1px);
-    }
+.add-task-button:active {
+    transform: translateY(1px);
+}
 
 .close-modal {
     position: absolute;
@@ -446,22 +489,25 @@ input[type="time"]::-webkit-calendar-picker-indicator {
     justify-content: center;
 }
 
-    .close-modal:hover {
-        color: #333;
-        background-color: #f5f5f5;
-    }
+.close-modal:hover {
+    color: #333;
+    background-color: #f5f5f5;
+}
+
 
 /* Completed Tasks Section */
+
 .completed-tasks {
     color: #333;
     margin-top: 24px;
 }
 
-    .completed-tasks h3 {
-        margin-bottom: 16px;
-        font-size: 1.2rem;
-        font-weight: 600;
-    }
+.completed-tasks h3 {
+    margin-bottom: 16px;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
 
 /* Add these to your Tasks.css */
 
@@ -476,12 +522,10 @@ input[type="time"]::-webkit-calendar-picker-indicator {
         box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
         border-color: rgba(0, 123, 255, 0.5);
     }
-
     50% {
         box-shadow: 0 0 20px rgba(0, 123, 255, 0.8);
         border-color: rgba(0, 123, 255, 1);
     }
-
     100% {
         box-shadow: 0 0 15px rgba(0, 123, 255, 0.5);
         border-color: rgba(0, 123, 255, 0.8);
@@ -502,25 +546,25 @@ input[type="time"]::-webkit-calendar-picker-indicator {
     font-weight: 500;
 }
 
-    .priority-label.priority-high {
-        background-color: rgba(220, 38, 38, 0.1);
-        color: #dc2626;
-    }
+.priority-label.priority-high {
+    background-color: rgba(220, 38, 38, 0.1);
+    color: #dc2626;
+}
 
-    .priority-label.priority-medium {
-        background-color: rgba(234, 179, 8, 0.1);
-        color: #ca8a04;
-    }
+.priority-label.priority-medium {
+    background-color: rgba(234, 179, 8, 0.1);
+    color: #ca8a04;
+}
 
-    .priority-label.priority-low {
-        background-color: rgba(34, 197, 94, 0.1);
-        color: #16a34a;
-    }
+.priority-label.priority-low {
+    background-color: rgba(34, 197, 94, 0.1);
+    color: #16a34a;
+}
 
-    .priority-label.priority-none {
-        background-color: rgba(107, 114, 128, 0.1);
-        color: #6b7280;
-    }
+.priority-label.priority-none {
+    background-color: rgba(107, 114, 128, 0.1);
+    color: #6b7280;
+}
 
 .task-due-date {
     display: flex;

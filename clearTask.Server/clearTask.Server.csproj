@@ -7,6 +7,8 @@
     <SpaRoot>..\cleartask.client</SpaRoot>
     <SpaProxyLaunchCommand>npm run dev</SpaProxyLaunchCommand>
     <SpaProxyServerUrl>https://localhost:5173</SpaProxyServerUrl>
+    <SpaProxyEnabled>false</SpaProxyEnabled>
+
   </PropertyGroup>
 
   <ItemGroup>
