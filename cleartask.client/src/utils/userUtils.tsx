@@ -5,5 +5,4 @@ export const getUserName = async (userId: string): Promise<string> => {
   return user.userdto.userName;
 };
 
-
 export default getUserName;
