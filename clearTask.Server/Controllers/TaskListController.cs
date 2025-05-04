@@ -48,6 +48,7 @@ namespace clearTask.Server.Controllers
 
         [Authorize]
         [HttpGet("getlists")]
+        [ResponseCache(Duration = 3600, VaryByQueryKeys = new[] { "userId" }, Location = ResponseCacheLocation.Client)] // Cache 
         public async Task<IActionResult> GetLists(string userId)
         {
             try

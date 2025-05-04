@@ -67,6 +67,7 @@ namespace clearTask.Server.Controllers
 
         [HttpGet("getUserInfo")]
         [Authorize]
+        [ResponseCache(Duration = 300, VaryByQueryKeys = new[] { "id" })] // 5 minutes cache
         public IActionResult GetUserProfile([FromQuery]string id)
         {
             if (string.IsNullOrWhiteSpace(id))

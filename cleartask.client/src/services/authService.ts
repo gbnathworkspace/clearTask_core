@@ -1,5 +1,5 @@
 import axios from 'axios';
-import CONFIG from '../config';
+import CONFIG from '../../config/config';
 
 export const API_URL = `${CONFIG.API_BASE_URL}api/auth/`;
 

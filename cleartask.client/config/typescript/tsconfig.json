@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "types": ["vite/client"],
     "sourceMap": true,
     "target": "ES2020",
     "useDefineForClassFields": true,

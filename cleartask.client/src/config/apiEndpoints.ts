@@ -1,4 +1,4 @@
-import CONFIG from '../config'
+import CONFIG from '../../config/config'
 
 export const API_BASE_URL_ = `${CONFIG.API_BASE_URL}api`;
 export const API_task = `${API_BASE_URL_}/task`;

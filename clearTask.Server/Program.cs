@@ -132,6 +132,9 @@ void ConfigureAdditionalServices(WebApplicationBuilder builder)
     builder.Services.AddSingleton<IRateLimitService, RateLimitService>();
     builder.Services.AddSingleton<Logger>();
 
+    // Add Response Caching
+    builder.Services.AddResponseCaching();
+
     ConfigureSwagger(builder);
 }
 
@@ -183,6 +186,8 @@ void ConfigureMiddleware(WebApplication app)
         });
     }
 
+    // Add Response Caching middleware BEFORE authentication
+    app.UseResponseCaching();
     // General middleware
     app.UseRouting();
     app.UseCors("AllowAllOrigins");
