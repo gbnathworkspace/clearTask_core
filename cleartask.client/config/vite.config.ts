@@ -3,6 +3,8 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "tailwindcss";
 import autoprefixer from "autoprefixer";
 import path from "path"; // ✅ Required for resolving paths
+import { resolve } from "path";
+
 
 
 export default defineConfig({
@@ -22,6 +24,9 @@ export default defineConfig({
   },
   build: {
     outDir: "dist",
+    // rollupOptions: {
+    //   input: resolve(__dirname, "./public/index.html"),
+    // },
   },
   server: {
     port: 5173,
